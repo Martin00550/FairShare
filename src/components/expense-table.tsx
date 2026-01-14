@@ -1,0 +1,77 @@
+"use client";
+
+import { MarkAsPaidButton } from "./mark-as-paid-button";
+
+interface Expense {
+    id: string;
+    date: string;
+    merchant: string;
+    category: string | null;
+    split_amount: number;
+    status: string;
+}
+
+const categoryColors: Record<string, string> = {
+    Healthcare: "bg-green-100 text-green-700",
+    Medical: "bg-green-100 text-green-700",
+    Education: "bg-blue-100 text-blue-700",
+    Living: "bg-purple-100 text-purple-700",
+    Clothing: "bg-orange-100 text-orange-700",
+    Other: "bg-slate-100 text-slate-700",
+};
+
+interface ExpenseTableProps {
+    expenses: Expense[];
+}
+
+export function ExpenseTable({ expenses }: ExpenseTableProps) {
+    return (
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+            <table className="w-full text-left">
+                <thead>
+                    <tr className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                        <th className="px-6 py-4">Date</th>
+                        <th className="px-6 py-4">Merchant</th>
+                        <th className="px-6 py-4 hidden sm:table-cell">Category</th>
+                        <th className="px-6 py-4 text-right">Your Share</th>
+                        <th className="px-6 py-4 text-right">Status</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                    {expenses.length === 0 ? (
+                        <tr>
+                            <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                                No expenses found. Start by scanning your first receipt above.
+                            </td>
+                        </tr>
+                    ) : (
+                        expenses.map((expense) => (
+                            <tr key={expense.id} className="hover:bg-slate-50 transition-colors">
+                                <td className="px-6 py-4 text-sm text-slate-500">
+                                    {new Date(expense.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <span className="font-semibold text-slate-900">{expense.merchant}</span>
+                                </td>
+                                <td className="px-6 py-4 hidden sm:table-cell">
+                                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${categoryColors[expense.category || "Other"] || categoryColors.Other}`}>
+                                        {expense.category || "Other"}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    <span className="font-bold text-indigo-600">${Number(expense.split_amount || 0).toFixed(2)}</span>
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    <MarkAsPaidButton
+                                        expenseId={expense.id}
+                                        currentStatus={expense.status}
+                                    />
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
+        </div>
+    );
+}
