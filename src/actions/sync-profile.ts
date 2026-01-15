@@ -5,9 +5,15 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 
 // Create admin client with service role key for bypassing RLS
 // Falls back to anon key if service role not available (dev mode)
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!serviceRoleKey) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set. Profile sync requires admin privileges.");
+}
+
 const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    serviceRoleKey,
     {
         auth: {
             autoRefreshToken: false,

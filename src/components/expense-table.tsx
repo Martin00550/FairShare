@@ -1,6 +1,6 @@
 "use client";
 
-import { MarkAsPaidButton } from "./mark-as-paid-button";
+
 
 interface Expense {
     id: string;
@@ -48,7 +48,7 @@ export function ExpenseTable({ expenses }: ExpenseTableProps) {
                         expenses.map((expense) => (
                             <tr key={expense.id} className="hover:bg-slate-50 transition-colors">
                                 <td className="px-6 py-4 text-sm text-slate-500">
-                                    {new Date(expense.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                    {new Date(expense.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
                                 </td>
                                 <td className="px-6 py-4">
                                     <span className="font-semibold text-slate-900">{expense.merchant}</span>
@@ -62,10 +62,12 @@ export function ExpenseTable({ expenses }: ExpenseTableProps) {
                                     <span className="font-bold text-indigo-600">${Number(expense.split_amount || 0).toFixed(2)}</span>
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    <MarkAsPaidButton
-                                        expenseId={expense.id}
-                                        currentStatus={expense.status}
-                                    />
+                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${expense.status === 'pending'
+                                        ? 'bg-slate-100 text-slate-800'
+                                        : 'bg-blue-100 text-blue-800'
+                                        }`}>
+                                        {expense.status === 'pending' ? 'Pending' : 'Invoiced'}
+                                    </span>
                                 </td>
                             </tr>
                         ))

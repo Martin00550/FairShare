@@ -23,6 +23,17 @@ export async function scanReceipt(formData: FormData) {
       - Date of purchase (date) in YYYY-MM-DD format
       - Total Amount (total_amount) as a number
       
+      CRITICAL DATE PARSING RULES:
+      Disambiguate ambiguous dates (like 05/04/2018) using THESE clues:
+      1. CURRENCY SYMBOLS:
+         - If you see "£" or "€", assume the region is Europe/UK and use DD/MM/YYYY format.
+         - If you see "$", check for further location clues.
+      2. LOCATION/ADDRESS:
+         - If the receipt mentions UK, Australia, New Zealand, or any EU country, use DD/MM/YYYY.
+         - If the receipt mentions USA or Canada, use MM/DD/YYYY.
+      3. LOGIC:
+         - If the first number is > 12, it's obviously DD/MM/YYYY.
+         
       Return ONLY a valid JSON object with keys: merchant, date, total_amount.
       Do not wrap in markdown code blocks.
     `;
@@ -43,10 +54,7 @@ export async function scanReceipt(formData: FormData) {
 
         const data = JSON.parse(cleanText);
 
-        // Calculate split (50/50 default)
-        const splitAmount = data.total_amount ? data.total_amount / 2 : 0;
-
-        return { success: true, data: { ...data, split_amount: splitAmount } };
+        return { success: true, data };
     } catch (error) {
         console.error("Gemini Scan Error:", error);
         return { error: "Failed to create invoice from receipt." };

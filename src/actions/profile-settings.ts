@@ -63,3 +63,37 @@ export async function markExpenseAsPaid(expenseId: string) {
 
     return { success: true };
 }
+
+export async function updatePaymentInstructions(instructions: string) {
+    const { userId } = await auth();
+    if (!userId) return { error: "Unauthorized" };
+
+    if (instructions.length > 500) {
+        return { error: "Instructions must be less than 500 characters" };
+    }
+
+    const { error } = await supabaseAdmin
+        .from("profiles")
+        .update({ payment_instructions: instructions })
+        .eq("id", userId);
+
+    if (error) {
+        console.error("Error updating payment instructions:", error);
+        return { error: error.message };
+    }
+
+    return { success: true };
+}
+
+export async function getPaymentInstructions() {
+    const { userId } = await auth();
+    if (!userId) return "";
+
+    const { data } = await supabaseAdmin
+        .from("profiles")
+        .select("payment_instructions")
+        .eq("id", userId)
+        .single();
+
+    return data?.payment_instructions || "";
+}

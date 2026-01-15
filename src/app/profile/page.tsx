@@ -2,8 +2,9 @@ import { currentUser } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
 import { Settings, Shield, CreditCard, User, Mail, Calendar, CheckCircle, Percent } from "lucide-react";
 import { SplitSettings } from "@/components/split-settings";
+import { PaymentSettings } from "@/components/payment-settings";
 import { UpgradeButton } from "@/components/upgrade-button";
-import { updateSplitPercentage } from "@/actions/profile-settings";
+import { updateSplitPercentage, updatePaymentInstructions } from "@/actions/profile-settings";
 
 const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -14,7 +15,7 @@ async function getProfileData(userId: string) {
     // Get profile data
     const { data: profile } = await supabaseAdmin
         .from("profiles")
-        .select("is_pro, lifetime_invoices_count, split_percentage")
+        .select("is_pro, lifetime_invoices_count, split_percentage, payment_instructions")
         .eq("id", userId)
         .single();
 
@@ -31,6 +32,7 @@ async function getProfileData(userId: string) {
         isPro: profile?.is_pro || false,
         invoicesUsed: profile?.lifetime_invoices_count || 0,
         splitPercentage: profile?.split_percentage || 50,
+        paymentInstructions: profile?.payment_instructions || "",
         receiptCount,
         totalTracked,
     };
@@ -47,12 +49,19 @@ export default async function ProfilePage() {
         );
     }
 
-    const { isPro, invoicesUsed, splitPercentage, receiptCount, totalTracked } = await getProfileData(user.id);
+    const { isPro, invoicesUsed, splitPercentage, paymentInstructions, receiptCount, totalTracked } = await getProfileData(user.id);
 
     async function handleSplitSave(newSplit: number) {
         "use server";
         const { revalidatePath } = await import("next/cache");
         await updateSplitPercentage(newSplit);
+        revalidatePath("/profile");
+    }
+
+    async function handlePaymentInstructionsSave(instructions: string) {
+        "use server";
+        const { revalidatePath } = await import("next/cache");
+        await updatePaymentInstructions(instructions);
         revalidatePath("/profile");
     }
 
@@ -81,7 +90,7 @@ export default async function ProfilePage() {
                             </div>
                             <div className="flex items-center gap-2 text-slate-500 mt-1">
                                 <Calendar className="w-4 h-4" />
-                                <span className="text-sm">Member since {new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                                <span className="text-sm">Member since {new Date(user.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                             </div>
                         </div>
                     </div>
@@ -95,6 +104,17 @@ export default async function ProfilePage() {
                     </div>
                     <div className="p-6">
                         <SplitSettings currentSplit={splitPercentage} onSave={handleSplitSave} />
+                    </div>
+                </div>
+
+                {/* Payment Instructions Settings */}
+                <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm mb-6">
+                    <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+                        <CreditCard className="w-5 h-5 text-slate-400" />
+                        <h3 className="font-bold text-slate-900">Payment Preferences</h3>
+                    </div>
+                    <div className="p-6">
+                        <PaymentSettings currentInstructions={paymentInstructions} onSave={handlePaymentInstructionsSave} />
                     </div>
                 </div>
 

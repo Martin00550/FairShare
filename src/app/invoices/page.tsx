@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
 import { Plus, FileText, Clock, CheckCircle } from "lucide-react";
+import { InvoiceStatusActions } from "@/components/invoice-status-actions";
 
 const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -12,42 +13,24 @@ const supabaseAdmin = createClient(
 // For now, we'll track invoices by counting distinct "invoiced" expense batches
 // In a full implementation, you'd have a separate invoices table
 async function getInvoiceHistory(userId: string) {
-    // Get all invoiced expenses grouped by date as a simple invoice proxy
-    const { data: expenses } = await supabaseAdmin
-        .from("expenses")
-        .select("id, date, merchant, split_amount, status, created_at")
+    const { data: invoices, error } = await supabaseAdmin
+        .from("invoices")
+        .select("id, invoice_number, created_at, total_due, pdf_url, status")
         .eq("user_id", userId)
-        .eq("status", "invoiced")
         .order("created_at", { ascending: false });
 
-    if (!expenses || expenses.length === 0) {
+    if (error) {
+        console.error("Error fetching invoices:", error);
         return [];
     }
 
-    // Group by date as a simple invoice representation
-    const invoiceMap = new Map<string, { items: number; total: number; date: string }>();
-    expenses.forEach(expense => {
-        const dateKey = new Date(expense.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        if (invoiceMap.has(dateKey)) {
-            const existing = invoiceMap.get(dateKey)!;
-            existing.items += 1;
-            existing.total += expense.split_amount || 0;
-        } else {
-            invoiceMap.set(dateKey, {
-                items: 1,
-                total: expense.split_amount || 0,
-                date: dateKey
-            });
-        }
-    });
-
-    // Convert to array with generated invoice IDs
-    return Array.from(invoiceMap.entries()).map(([date, data], index) => ({
-        id: `INV-${new Date().getFullYear()}-${String(index + 1).padStart(3, '0')}`,
-        date: data.date,
-        items: data.items,
-        total: data.total,
-        status: "paid" as const
+    return (invoices || []).map(inv => ({
+        id: inv.id,
+        invoiceNumber: inv.invoice_number || `INV-${inv.id}`,
+        date: new Date(inv.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+        total: inv.total_due || 0,
+        pdfUrl: inv.pdf_url,
+        status: inv.status || "generated"
     }));
 }
 
@@ -106,7 +89,6 @@ export default async function InvoicesPage() {
                                 <tr className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500 font-semibold border-b border-slate-200">
                                     <th className="px-6 py-4">Invoice #</th>
                                     <th className="px-6 py-4">Date</th>
-                                    <th className="px-6 py-4 hidden sm:table-cell">Items</th>
                                     <th className="px-6 py-4 text-right">Total</th>
                                     <th className="px-6 py-4 text-right">Status</th>
                                 </tr>
@@ -115,17 +97,29 @@ export default async function InvoicesPage() {
                                 {invoices.map((invoice) => (
                                     <tr key={invoice.id} className="hover:bg-slate-50 transition-colors">
                                         <td className="px-6 py-4">
-                                            <span className="font-semibold text-slate-900">{invoice.id}</span>
+                                            <span className="font-semibold text-slate-900">{invoice.invoiceNumber}</span>
                                         </td>
                                         <td className="px-6 py-4 text-sm text-slate-500">{invoice.date}</td>
-                                        <td className="px-6 py-4 text-sm text-slate-500 hidden sm:table-cell">{invoice.items} expenses</td>
                                         <td className="px-6 py-4 text-right">
-                                            <span className="font-bold text-indigo-600">${invoice.total.toFixed(2)}</span>
+                                            <span className="font-bold text-indigo-600">${Number(invoice.total).toFixed(2)}</span>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-600">
-                                                <CheckCircle className="w-3 h-3" /> Generated
-                                            </span>
+                                            <div className="flex items-center justify-end gap-3">
+                                                <InvoiceStatusActions
+                                                    invoiceId={invoice.id}
+                                                    status={invoice.status}
+                                                />
+                                                {invoice.pdfUrl && (
+                                                    <a
+                                                        href={invoice.pdfUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-indigo-600 hover:text-indigo-800"
+                                                    >
+                                                        <FileText className="w-5 h-5" />
+                                                    </a>
+                                                )}
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

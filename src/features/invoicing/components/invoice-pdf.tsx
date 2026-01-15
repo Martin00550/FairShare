@@ -137,7 +137,7 @@ export function InvoicePDF({ id, date, billTo, expenses, totalDue }: InvoicePDFP
                     {expenses.map((expense) => (
                         <View style={styles.tableRow} key={expense.id}>
                             <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>{new Date(expense.date).toLocaleDateString()}</Text>
+                                <Text style={styles.tableCell}>{new Date(expense.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</Text>
                             </View>
                             <View style={{ ...styles.tableCol, width: "35%" }}>
                                 <Text style={styles.tableCell}>{expense.merchant}</Text>
