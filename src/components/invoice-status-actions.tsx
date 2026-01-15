@@ -4,9 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Loader2, DollarSign } from "lucide-react";
 import { markInvoiceAsPaid } from "@/actions/invoice-actions";
-import { toast } from "sonner"; // Assuming sonner is installed, if not will use local alert/state
-// Actually, checking previous files, sonner seemed to be missing or I replaced it. 
-// I will use local state to be safe, consistent with payment-settings.tsx
 
 interface InvoiceStatusActionsProps {
     invoiceId: string;
