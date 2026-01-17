@@ -1,13 +1,34 @@
 "use server";
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { auth } from "@clerk/nextjs/server";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
+// Allowed image types for receipt scanning
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
 export async function scanReceipt(formData: FormData) {
+    // SECURITY: Require authentication to prevent API abuse
+    const { userId } = await auth();
+    if (!userId) {
+        return { error: "Unauthorized" };
+    }
+
     const file = formData.get("file") as File;
     if (!file) {
         return { error: "No file uploaded" };
+    }
+
+    // SECURITY: Validate file type server-side
+    if (!ALLOWED_TYPES.includes(file.type)) {
+        return { error: "Invalid file type. Only images (JPEG, PNG, WebP, GIF) are allowed." };
+    }
+
+    // SECURITY: Validate file size server-side
+    if (file.size > MAX_FILE_SIZE) {
+        return { error: "File too large. Maximum 10MB allowed." };
     }
 
     const arrayBuffer = await file.arrayBuffer();

@@ -3,6 +3,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { sanitizeError } from "@/lib/security";
+import { logSystemError } from "@/actions/system-logging";
 
 const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -72,12 +74,14 @@ export async function saveGeneratedInvoice({ pdfBuffer, expenseIds, totalDue }: 
         const invoiceId = invoiceData.id;
 
         // 5. Update expenses to link to this invoice and set status to 'invoiced'
+        // SECURITY: Must filter by user_id to prevent IDOR attacks
         const { error: updateError } = await supabaseAdmin
             .from("expenses")
             .update({
                 status: 'invoiced',
                 invoice_id: invoiceId
             })
+            .eq("user_id", userId)
             .in("id", expenseIds);
 
         if (updateError) {
@@ -90,8 +94,10 @@ export async function saveGeneratedInvoice({ pdfBuffer, expenseIds, totalDue }: 
 
         return { success: true, invoiceId, pdfUrl };
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+        // Log critical error to DB
+        await logSystemError(error, "saveGeneratedInvoice", "critical", { expenseIds, totalDue });
         console.error("Save invoice error:", error);
-        return { error: error.message || "An unexpected error occurred" };
+        return { error: sanitizeError(error, "Failed to save invoice") };
     }
 }

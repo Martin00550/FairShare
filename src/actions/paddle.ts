@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@supabase/supabase-js";
+import { auth } from "@clerk/nextjs/server";
 
 // Initialize Supabase Admin for DB updates (cancellation status)
 const supabaseAdmin = createClient(
@@ -26,6 +27,20 @@ async function getPaddleHeaders() {
 }
 
 export async function getSubscriptionUpdateUrl(subscriptionId: string) {
+    // SECURITY: Verify subscription ownership before allowing update
+    const { userId } = await auth();
+    if (!userId) return { error: "Unauthorized" };
+
+    const { data: profile, error: fetchError } = await supabaseAdmin
+        .from("profiles")
+        .select("paddle_subscription_id")
+        .eq("id", userId)
+        .single();
+
+    if (fetchError || profile?.paddle_subscription_id !== subscriptionId) {
+        return { error: "Subscription not found or unauthorized" };
+    }
+
     try {
         const headers = await getPaddleHeaders();
 
@@ -66,6 +81,20 @@ export async function getSubscriptionUpdateUrl(subscriptionId: string) {
 }
 
 export async function cancelSubscription(subscriptionId: string) {
+    // SECURITY: Verify subscription ownership before allowing cancellation
+    const { userId } = await auth();
+    if (!userId) return { error: "Unauthorized" };
+
+    const { data: profile, error: fetchError } = await supabaseAdmin
+        .from("profiles")
+        .select("paddle_subscription_id")
+        .eq("id", userId)
+        .single();
+
+    if (fetchError || profile?.paddle_subscription_id !== subscriptionId) {
+        return { error: "Subscription not found or unauthorized" };
+    }
+
     try {
         const headers = await getPaddleHeaders();
 

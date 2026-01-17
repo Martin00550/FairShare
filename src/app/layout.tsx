@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { NavBar } from "@/components/nav-bar";
 import { PaddleProvider } from "@/components/paddle-provider";
 import { Toaster } from "sonner";
+import { AnnouncementBanner } from "@/components/announcement-banner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
@@ -55,6 +56,7 @@ export default function RootLayout({
           "font-sans bg-stone-50 text-slate-900 antialiased min-h-screen flex flex-col"
         )}>
           <PaddleProvider>
+            <AnnouncementBanner />
             <NavBar />
             <main className="flex-1 pb-16 md:pb-0">
               {children}

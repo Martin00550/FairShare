@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { sanitizeError } from "@/lib/security";
 
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -50,8 +51,8 @@ export async function markInvoiceAsPaid(invoiceId: string) {
         revalidatePath("/profile");
 
         return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Error marking invoice as paid:", error);
-        return { error: error.message || "Failed to mark as paid" };
+        return { error: sanitizeError(error, "Failed to mark as paid") };
     }
 }
