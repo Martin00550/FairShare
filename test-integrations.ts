@@ -48,7 +48,7 @@ async function verify() {
     // 3. Test Gemini Connection
     try {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); // Use the model we specified
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Use the stable model
 
         // Simple prompt
         const result = await model.generateContent("Respond with 'OK' if you receive this.");

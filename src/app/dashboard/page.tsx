@@ -13,7 +13,7 @@ const supabaseAdmin = createClient(
 async function getDashboardData(userId: string) {
     const { data: profile } = await supabaseAdmin
         .from("profiles")
-        .select("is_pro, lifetime_invoices_count")
+        .select("is_pro, lifetime_invoices_count, payment_instructions")
         .eq("id", userId)
         .single();
 
@@ -40,6 +40,7 @@ async function getDashboardData(userId: string) {
     return {
         invoicesUsed: profile?.lifetime_invoices_count || 0,
         isPro: profile?.is_pro || false,
+        paymentInstructionsSet: !!profile?.payment_instructions,
         totalCollected,
         recentExpenses: recentExpenses || [],
     };
@@ -59,8 +60,8 @@ export default async function Dashboard() {
     }
 
     await syncUserProfile();
-    const { invoicesUsed, isPro, totalCollected, recentExpenses } = await getDashboardData(userId);
-    const invoicesLimit = 5;
+    const { invoicesUsed, isPro, paymentInstructionsSet, totalCollected, recentExpenses } = await getDashboardData(userId);
+    const invoicesLimit = 3;
     const hasExpenses = recentExpenses.length > 0;
 
     return (
@@ -76,6 +77,27 @@ export default async function Dashboard() {
                         {hasExpenses ? "Here's your expense tracking overview." : "Get started by tracking your first shared expense."}
                     </p>
                 </div>
+
+                {/* Missing Payment Instructions Warning */}
+                {!paymentInstructionsSet && (
+                    <div className="mb-8 bg-amber-50 border border-amber-100 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm animate-in fade-in slide-in-from-top-4 duration-700">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 shrink-0">
+                                <Zap className="w-6 h-6" />
+                            </div>
+                            <div className="text-center sm:text-left">
+                                <h3 className="font-bold text-slate-900">Finish setting up your profile</h3>
+                                <p className="text-sm text-slate-600">Add your payment instructions so co-parents know how to reimburse you.</p>
+                            </div>
+                        </div>
+                        <Link href="/profile">
+                            <Button variant="outline" className="border-amber-200 text-amber-700 hover:bg-amber-100 font-bold px-6 h-11 rounded-xl whitespace-nowrap">
+                                Setup Payment Info
+                                <ChevronRight className="w-4 h-4 ml-1" />
+                            </Button>
+                        </Link>
+                    </div>
+                )}
 
                 {!hasExpenses ? (
                     /* Empty State */
@@ -125,27 +147,62 @@ export default async function Dashboard() {
                             </div>
 
                             {/* Usage Card */}
-                            <div className="relative overflow-hidden bg-linear-to-br from-indigo-600 via-indigo-700 to-violet-800 rounded-2xl p-6 text-white shadow-2xl shadow-indigo-200/50 group">
+                            <div className="relative overflow-hidden bg-linear-to-br from-indigo-600 via-indigo-700 to-indigo-900 rounded-3xl p-6 text-white shadow-2xl shadow-indigo-200 group">
                                 {/* Decorative elements */}
-                                <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors duration-500" />
-                                <div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-32 h-32 bg-indigo-400/20 rounded-full blur-3xl" />
+                                <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-700" />
+                                <div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-40 h-40 bg-indigo-400/20 rounded-full blur-3xl" />
 
-                                <div className="relative z-10 flex items-center gap-3 mb-6">
-                                    <div className="p-2.5 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 shadow-inner">
-                                        <Zap className="w-5 h-5 text-amber-300 fill-amber-300" />
+                                <div className="relative z-10 flex items-center gap-4 mb-8">
+                                    <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center shadow-inner">
+                                        <Zap className="w-6 h-6 text-amber-300 fill-amber-300" />
                                     </div>
-                                    <span className="text-sm font-black text-white uppercase tracking-[0.15em] drop-shadow-sm">
+                                    <span className="text-lg font-black text-white uppercase tracking-[0.2em] drop-shadow-md">
                                         {isPro ? "Pro Account" : "Free Usage"}
                                     </span>
                                 </div>
 
-                                <div className="relative z-10 space-y-4">
-                                    <div className="inline-flex items-center px-3 py-1 bg-white/10 backdrop-blur-md text-emerald-300 text-[10px] font-black rounded-full border border-emerald-400/40 shadow-sm uppercase tracking-wider">
-                                        Unlimited
-                                    </div>
-                                    <p className="text-[15px] text-indigo-50 font-medium leading-relaxed max-w-[200px]">
-                                        Enjoy unlimited court-ready <span className="font-bold text-white underline underline-offset-4 decoration-indigo-400/50">invoices</span> and premium insights.
-                                    </p>
+                                <div className="relative z-10 space-y-6">
+                                    {isPro ? (
+                                        <>
+                                            <div className="inline-flex items-center px-4 py-1.5 bg-emerald-400/20 backdrop-blur-md text-emerald-300 text-[10px] font-black rounded-full border border-emerald-400/30 shadow-sm uppercase tracking-widest">
+                                                Unlimited
+                                            </div>
+                                            <p className="text-[15px] text-indigo-50 font-medium leading-relaxed max-w-[240px]">
+                                                Enjoy unlimited <span className="font-bold text-white underline underline-offset-4 decoration-indigo-400/50">invoices</span>, unlimited history, and court-ready reports.
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="space-y-3">
+                                                <div className="flex justify-between items-end">
+                                                    <span className="text-xs font-black uppercase tracking-widest text-indigo-200">Usage Limit</span>
+                                                    <span className="font-black text-xl text-white">{invoicesUsed}<span className="text-indigo-300 text-sm ml-1">/ {invoicesLimit}</span></span>
+                                                </div>
+                                                <div className="w-full h-3 bg-white/10 backdrop-blur-sm rounded-full overflow-hidden border border-white/5">
+                                                    <div
+                                                        className={`h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_12px_rgba(255,255,255,0.3)] ${invoicesUsed >= invoicesLimit ? 'bg-rose-500' :
+                                                            invoicesUsed >= 2 ? 'bg-amber-400' :
+                                                                'bg-emerald-400'
+                                                            }`}
+                                                        style={{ width: `${Math.min((invoicesUsed / invoicesLimit) * 100, 100)}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {invoicesUsed >= invoicesLimit ? (
+                                                <Link href="/pricing" className="block">
+                                                    <Button className="w-full h-12 bg-white text-indigo-700 hover:bg-indigo-50 font-black rounded-xl shadow-xl transition-all active:scale-95 group/btn">
+                                                        UPGRADE FOR UNLIMITED
+                                                        <ChevronRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
+                                                    </Button>
+                                                </Link>
+                                            ) : (
+                                                <p className="text-[14px] text-indigo-100 font-medium leading-relaxed">
+                                                    Upgrade to Pro for <span className="font-bold text-white underline underline-offset-4 decoration-white/30">unlimited invoice generation</span>.
+                                                </p>
+                                            )}
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>

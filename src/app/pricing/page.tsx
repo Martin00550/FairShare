@@ -9,20 +9,18 @@ import Link from "next/link";
 
 const features = {
     free: [
-        "5 Free Invoices",
-        "AI-Powered Receipt Scanning",
-        "Professional PDF Reports",
-        "Secure Cloud Storage",
+        "3 Free Invoices",
+        "AI Receipt Scanning",
+        "Cloud Shoebox Storage",
+        "Professional PDF Exports",
+        "History Tracking",
     ],
     pro: [
         "Unlimited Invoices",
-        "AI-Powered Receipt Scanning",
-        "Professional PDF Reports",
-        "Secure Cloud Storage",
-        "Priority Support",
-        "Court-Ready Documentation",
-        "Export to Excel/CSV",
-        "Custom Branding",
+        "AI Receipt Scanning",
+        "Cloud Shoebox Storage",
+        "Professional PDF Exports",
+        "History Tracking",
     ],
 };
 
@@ -128,13 +126,6 @@ export default function PricingPage() {
 
                     {/* Pro Plan */}
                     <div className="bg-slate-900 rounded-2xl p-8 shadow-xl relative overflow-hidden">
-                        {/* Popular badge */}
-                        <div className="absolute top-0 right-0">
-                            <div className="bg-amber-400 text-slate-900 text-xs font-black px-4 py-1 rounded-bl-xl">
-                                MOST POPULAR
-                            </div>
-                        </div>
-
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
                                 <Zap className="w-6 h-6 text-white" />
@@ -168,7 +159,7 @@ export default function PricingPage() {
                         </Button>
 
                         <p className="text-center text-xs text-slate-500 mt-3">
-                            7-day free trial • Cancel anytime
+                            Cancel anytime
                         </p>
 
                         {/* Decorative glow */}
@@ -220,6 +211,14 @@ export default function PricingPage() {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* AI Disclosure */}
+            <div className="max-w-3xl mx-auto px-6 pb-20">
+                <p className="text-center text-xs text-slate-400 leading-relaxed">
+                    <span className="font-bold text-slate-500 uppercase tracking-wider block mb-1 text-[10px]">AI Disclosure</span>
+                    FairShare is an independent service built on top of advanced AI models. We are an independent product and are not affiliated with, endorsed by, or sponsored by Google, OpenAI, or any other model providers.
+                </p>
             </div>
         </div>
     );

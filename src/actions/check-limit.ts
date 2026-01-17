@@ -30,7 +30,7 @@ export async function checkAndIncrementLimit() {
     let isPro = profile?.is_pro || false;
 
     // 2. Check Logic
-    if (!isPro && currentCount >= 5) {
+    if (!isPro && currentCount >= 3) {
         return { allowed: false, reason: "limit_reached" };
     }
 

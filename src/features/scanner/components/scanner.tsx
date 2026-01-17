@@ -39,6 +39,9 @@ export function Scanner() {
     const [data, setData] = useState<ScannedData | null>(null);
     const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
     const [splitPercentage, setSplitPercentage] = useState(50);
+    const [isCustomCategory, setIsCustomCategory] = useState(false);
+
+    const PRESET_CATEGORIES = ["Medical", "Education", "Childcare", "Groceries", "Clothing", "Entertainment", "Transportation", "Other"];
 
     // Fetch user's configured split percentage on mount
     useEffect(() => {
@@ -62,8 +65,18 @@ export function Scanner() {
         }
     };
 
+    const MAX_FILE_SIZE_MB = 10;
+    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
     const handleScan = async () => {
         if (!file) return;
+
+        // Check file size before uploading
+        if (file.size > MAX_FILE_SIZE_BYTES) {
+            showToast(`File too large. Please use an image under ${MAX_FILE_SIZE_MB}MB.`, "error");
+            return;
+        }
+
         setIsScanning(true);
 
         const formData = new FormData();
@@ -223,6 +236,43 @@ export function Scanner() {
                                     />
                                 </div>
                             </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-black uppercase tracking-widest text-slate-400">Category</label>
+                            <select
+                                value={isCustomCategory ? "Custom" : (PRESET_CATEGORIES.includes(data.category || "") ? data.category : "Other")}
+                                onChange={(e) => {
+                                    if (e.target.value === "Custom") {
+                                        setIsCustomCategory(true);
+                                        setData({ ...data, category: "" });
+                                    } else {
+                                        setIsCustomCategory(false);
+                                        setData({ ...data, category: e.target.value });
+                                    }
+                                }}
+                                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-medium appearance-none cursor-pointer"
+                            >
+                                <option value="Medical">Medical</option>
+                                <option value="Education">Education</option>
+                                <option value="Childcare">Childcare</option>
+                                <option value="Groceries">Groceries</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Other">Other</option>
+                                <option value="Custom">Custom</option>
+                            </select>
+                            {isCustomCategory && (
+                                <input
+                                    type="text"
+                                    placeholder="Enter custom category..."
+                                    value={data.category || ""}
+                                    onChange={(e) => setData({ ...data, category: e.target.value })}
+                                    className="w-full p-3 mt-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-medium"
+                                    autoFocus
+                                />
+                            )}
                         </div>
 
                         <div className="p-5 bg-indigo-600 rounded-2xl flex justify-between items-center text-white shadow-lg shadow-indigo-100 relative overflow-hidden group">

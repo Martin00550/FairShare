@@ -4,6 +4,7 @@ import { Settings, Shield, CreditCard, User, Mail, Calendar, CheckCircle, Percen
 import { SplitSettings } from "@/components/split-settings";
 import { PaymentSettings } from "@/components/payment-settings";
 import { UpgradeButton } from "@/components/upgrade-button";
+import { ManageSubscription } from "@/components/manage-subscription";
 import { updateSplitPercentage, updatePaymentInstructions } from "@/actions/profile-settings";
 
 const supabaseAdmin = createClient(
@@ -15,7 +16,7 @@ async function getProfileData(userId: string) {
     // Get profile data
     const { data: profile } = await supabaseAdmin
         .from("profiles")
-        .select("is_pro, lifetime_invoices_count, split_percentage, payment_instructions")
+        .select("is_pro, lifetime_invoices_count, split_percentage, payment_instructions, paddle_subscription_id")
         .eq("id", userId)
         .single();
 
@@ -33,6 +34,7 @@ async function getProfileData(userId: string) {
         invoicesUsed: profile?.lifetime_invoices_count || 0,
         splitPercentage: profile?.split_percentage || 50,
         paymentInstructions: profile?.payment_instructions || "",
+        paddleSubscriptionId: profile?.paddle_subscription_id || "",
         receiptCount,
         totalTracked,
     };
@@ -49,7 +51,7 @@ export default async function ProfilePage() {
         );
     }
 
-    const { isPro, invoicesUsed, splitPercentage, paymentInstructions, receiptCount, totalTracked } = await getProfileData(user.id);
+    const { isPro, invoicesUsed, splitPercentage, paymentInstructions, paddleSubscriptionId, receiptCount, totalTracked } = await getProfileData(user.id);
 
     async function handleSplitSave(newSplit: number) {
         "use server";
@@ -135,7 +137,21 @@ export default async function ProfilePage() {
                                         <span className="font-bold text-slate-900">Pro Account</span>
                                         <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full">ACTIVE</span>
                                     </div>
-                                    <p className="text-sm text-slate-500 mt-1">Unlimited invoices and court-ready reports.</p>
+                                    <p className="text-sm text-slate-500 mt-1">Unlimited invoices, history, and court-ready reports.</p>
+                                    <div className="mt-4 flex flex-col gap-2">
+                                        {paddleSubscriptionId ? (
+                                            <>
+                                                <ManageSubscription subscriptionId={paddleSubscriptionId} />
+                                                <p className="text-[11px] text-slate-400">
+                                                    Update payment methods or cancel your subscription at any time.
+                                                </p>
+                                            </>
+                                        ) : (
+                                            <p className="text-sm text-red-500 italic">
+                                                Subscription ID not found. Please contact support.
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ) : (
@@ -146,7 +162,7 @@ export default async function ProfilePage() {
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2">
                                         <span className="font-bold text-slate-900">Free Account</span>
-                                        <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs font-bold rounded-full">{invoicesUsed}/5 INVOICES</span>
+                                        <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs font-bold rounded-full">{invoicesUsed}/3 INVOICES</span>
                                     </div>
                                     <p className="text-sm text-slate-500 mt-1">Upgrade to Pro for unlimited invoices.</p>
                                     <UpgradeButton />
