@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Receipt, FileText, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { UserButton, SignedIn, SignedOut, SignInButton, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 
 export function NavBar() {
     const pathname = usePathname();
@@ -77,21 +77,26 @@ export function NavBar() {
 
                     {/* Right - Actions */}
                     <div className="flex items-center gap-4 justify-end">
-                        <SignedIn>
-                            <UserButton afterSignOutUrl="/" />
-                        </SignedIn>
-                        <SignedOut>
-                            <SignInButton mode="modal">
-                                <button className="text-slate-600 px-3 py-2 rounded-xl text-sm font-bold hover:bg-slate-100 transition-colors">
-                                    Log In
-                                </button>
-                            </SignInButton>
-                            <Link href="/sign-up">
-                                <button className="bg-indigo-600 text-white px-4 md:px-5 py-2 rounded-xl text-sm font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all hover:-translate-y-0.5 whitespace-nowrap">
-                                    Get Started
-                                </button>
-                            </Link>
-                        </SignedOut>
+                        <ClerkLoading>
+                            <div className="h-9 w-24 bg-slate-100 rounded-xl animate-pulse" />
+                        </ClerkLoading>
+                        <ClerkLoaded>
+                            <SignedIn>
+                                <UserButton afterSignOutUrl="/" />
+                            </SignedIn>
+                            <SignedOut>
+                                <SignInButton mode="modal">
+                                    <button className="text-slate-600 px-3 py-2 rounded-xl text-sm font-bold hover:bg-slate-100 transition-colors">
+                                        Log In
+                                    </button>
+                                </SignInButton>
+                                <Link href="/sign-up">
+                                    <button className="bg-indigo-600 text-white px-4 md:px-5 py-2 rounded-xl text-sm font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all hover:-translate-y-0.5 whitespace-nowrap">
+                                        Get Started
+                                    </button>
+                                </Link>
+                            </SignedOut>
+                        </ClerkLoaded>
                     </div>
                 </div>
             </header>
