@@ -402,7 +402,7 @@ export default async function Home() {
             <div className="flex md:justify-end">
               <div className="bg-slate-50 rounded-lg px-4 py-2 border border-slate-100">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight block">Need help?</span>
-                <a href="mailto:Getfairuse@proton.me" className="text-sm font-bold text-indigo-600 hover:text-indigo-700">Getfairuse@proton.me</a>
+                <a href="mailto:hello@getfairshare.cloud" className="text-sm font-bold text-indigo-600 hover:text-indigo-700">hello@getfairshare.cloud</a>
               </div>
             </div>
           </div>

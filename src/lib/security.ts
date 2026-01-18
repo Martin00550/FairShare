@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 
 // Security utilities for FairShare
-export const ADMIN_EMAIL = "getfairuse@proton.me";
+export const ADMIN_EMAIL = "hello@getfairshare.cloud";
 
 /**
  * SECURITY: Sanitize error messages before returning to client.

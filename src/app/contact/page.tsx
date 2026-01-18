@@ -35,8 +35,8 @@ export default function ContactPage() {
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-slate-900">Email Us</h3>
-                                    <a href="mailto:Getfairuse@proton.me" className="text-indigo-600 font-semibold hover:underline">
-                                        Getfairuse@proton.me
+                                    <a href="mailto:hello@getfairshare.cloud" className="text-indigo-600 font-semibold hover:underline">
+                                        hello@getfairshare.cloud
                                     </a>
                                 </div>
                             </div>

@@ -69,7 +69,7 @@ export default function RefundPolicy() {
                             <p className="font-bold text-slate-900">Martin Vasko</p>
                             <p>Ulica Jozefa Adamca 9983/24</p>
                             <p>917 01 Trnava, Slovakia</p>
-                            <p>Email: <a href="mailto:Getfairuse@proton.me" className="text-indigo-600 hover:underline">Getfairuse@proton.me</a></p>
+                            <p>Email: <a href="mailto:hello@getfairshare.cloud" className="text-indigo-600 hover:underline">hello@getfairshare.cloud</a></p>
                         </div>
                     </section>
                 </div>
