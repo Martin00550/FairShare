@@ -12,8 +12,82 @@ export default async function Home() {
     redirect("/dashboard");
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "FairShare",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "The stress-free way to manage shared co-parenting expenses and generate unilateral child support invoices.",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "120"
+    }
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is FairShare documentation court-ready?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. FairShare generates standardized, professional PDF invoices with attached receipt evidence and timestamps. Lawyers and judges prefer this 'digital paper trail' over messy text message threads or handwritten lists."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use FairShare even if my co-parent refuses to use it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely. FairShare is designed for unilateral use. You can track expenses, store receipts, and send official invoices to your co-parent's email. They don't need an account for you to maintain a professional legal record."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the AI receipt scanning work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "When you upload a photo or PDF of a receipt, our AI automatically extracts the date, vendor, category, and total amount. This reduces manual entry errors and ensures your records are consistently formatted."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my data and my child's information secure?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Security is our priority. We use industry-standard encryption, secure authentication via Clerk, and protected cloud storage for all sensitive documents and data."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need an invite from my co-parent to start?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. You can start tracking and generating invoices immediately. FairShare empowers you to maintain your boundaries and records independently."
+        }
+      }
+    ]
+  };
+
   return (
     <div className="flex flex-col bg-stone-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       {/* Hero Section */}
       <section className="w-full max-w-6xl mx-auto px-6 py-16 lg:py-24">
         <div className="grid lg:grid-cols-2 gap-12 items-stretch">

@@ -4,7 +4,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { NavBar } from "@/components/nav-bar";
-import { PaddleProvider } from "@/components/paddle-provider";
 import { Toaster } from "sonner";
 import { AnnouncementBanner } from "@/components/announcement-banner";
 
@@ -13,8 +12,47 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfa
 const lato = Lato({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-lato" });
 
 export const metadata: Metadata = {
-  title: "FairShare - Empowering Co-Parenting",
-  description: "Stop adding up receipts. Start getting reimbursed. The stress-free way to manage shared expenses.",
+  metadataBase: new URL('https://getfairshare.cloud'),
+  title: {
+    default: "FairShare - Co-Parenting Expense Tracker & Child Support Logs",
+    template: "%s | FairShare"
+  },
+  description: "Stop adding up receipts. Start getting reimbursed. The stress-free way to manage shared expenses and create unilateral child support invoice documentation.",
+  keywords: ["co-parenting app", "expense tracker", "child support invoice", "custody expenses", "receipt scanner", "unilateral parenting tools"],
+  authors: [{ name: "FairShare" }],
+  creator: "FairShare",
+  publisher: "FairShare",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://getfairshare.cloud",
+    title: "FairShare - Track Co-Parenting Expenses & Generate Invoices",
+    description: "The easiest way to track reusable co-parenting expenses. Scan receipts, generate professional PDFs, and keep a perfect audit trail.",
+    siteName: "FairShare",
+    images: [{
+      url: "/og-image.jpg", // We'll need to make sure this exists or use a default
+      width: 1200,
+      height: 630,
+      alt: "FairShare Dashboard Preview"
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FairShare - Co-Parenting Expense Tracker",
+    description: "Turn your shoebox of receipts into a clear audit trail. Professional invoicing for co-parents.",
+    images: ["/og-image.jpg"], // reusing OG image
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -55,14 +93,12 @@ export default function RootLayout({
           lato.variable,
           "font-sans bg-stone-50 text-slate-900 antialiased min-h-screen flex flex-col"
         )}>
-          <PaddleProvider>
-            <AnnouncementBanner />
-            <NavBar />
-            <main className="flex-1 pb-16 md:pb-0">
-              {children}
-            </main>
-            <Toaster richColors position="bottom-right" />
-          </PaddleProvider>
+          <AnnouncementBanner />
+          <NavBar />
+          <main className="flex-1 pb-16 md:pb-0">
+            {children}
+          </main>
+          <Toaster richColors position="bottom-right" />
         </body>
       </html>
     </ClerkProvider>
