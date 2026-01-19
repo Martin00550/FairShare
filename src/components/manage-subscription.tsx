@@ -1,3 +1,5 @@
+"use client";
+
 import { Settings, CreditCard, XCircle } from "lucide-react";
 import { CreemPortal } from "@creem_io/nextjs";
 import {
