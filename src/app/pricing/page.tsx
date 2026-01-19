@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Check, Zap, Shield, FileText, Sparkles, Receipt } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { usePaddle } from "@/components/paddle-provider";
+import { CreemCheckout } from "@creem_io/nextjs";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
@@ -25,44 +24,8 @@ const features = {
 };
 
 export default function PricingPage() {
-    const { isLoaded, openCheckout } = usePaddle();
     const { user, isSignedIn } = useUser();
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleUpgrade = () => {
-        if (!isSignedIn) {
-            // Redirect to sign up
-            window.location.href = "/sign-up?redirect=/pricing";
-            return;
-        }
-
-        setIsLoading(true);
-
-        const proPriceId = process.env.NEXT_PUBLIC_PADDLE_PRO_PRICE_ID;
-
-        if (!proPriceId) {
-            console.error("NEXT_PUBLIC_PADDLE_PRO_PRICE_ID not configured");
-            alert("Payment system not configured. Please contact support.");
-            setIsLoading(false);
-            return;
-        }
-
-        openCheckout({
-            items: [{ priceId: proPriceId, quantity: 1 }],
-            customer: {
-                email: user?.emailAddresses?.[0]?.emailAddress,
-            },
-            customData: {
-                user_id: user?.id || "",
-            },
-            settings: {
-                successUrl: `${window.location.origin}/dashboard?upgrade=success`,
-                displayMode: "overlay",
-            },
-        });
-
-        setIsLoading(false);
-    };
+    const productId = process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID;
 
     return (
         <div className="min-h-screen bg-stone-50 pb-24 md:pb-8">
@@ -150,13 +113,31 @@ export default function PricingPage() {
                             ))}
                         </ul>
 
-                        <Button
-                            onClick={handleUpgrade}
-                            disabled={!isLoaded || isLoading}
-                            className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl shadow-lg shadow-indigo-900/50"
-                        >
-                            {isLoading ? "Loading..." : "Upgrade to Pro"}
-                        </Button>
+                        {isSignedIn && productId ? (
+                            <CreemCheckout
+                                productId={productId}
+                                successUrl={typeof window !== 'undefined' ? `${window.location.origin}/dashboard?upgrade=success` : '/dashboard?upgrade=success'}
+                                referenceId={user?.id || ""}
+                                customer={{
+                                    email: user?.emailAddresses?.[0]?.emailAddress || "",
+                                    name: user?.fullName || "",
+                                }}
+                            >
+                                <Button
+                                    className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl shadow-lg shadow-indigo-900/50"
+                                >
+                                    Upgrade to Pro
+                                </Button>
+                            </CreemCheckout>
+                        ) : (
+                            <Link href="/sign-up?redirect=/pricing">
+                                <Button
+                                    className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl shadow-lg shadow-indigo-900/50"
+                                >
+                                    Sign Up to Upgrade
+                                </Button>
+                            </Link>
+                        )}
 
                         <p className="text-center text-xs text-slate-500 mt-3">
                             Cancel anytime
