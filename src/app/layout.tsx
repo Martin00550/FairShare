@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { NavBar } from "@/components/nav-bar";
 import { Toaster } from "sonner";
 import { AnnouncementBanner } from "@/components/announcement-banner";
+import { PaddleProvider } from "@/components/paddle-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     default: "FairShare - Co-Parenting Expense Tracker & Child Support Logs",
     template: "%s | FairShare"
   },
-    description: "Stop adding up receipts. Start getting reimbursed. Organize shared expenses and create professional invoice documentation.",
+  description: "Stop adding up receipts. Start getting reimbursed. Organize shared expenses and create professional invoice documentation.",
   keywords: ["co-parenting app", "expense tracker", "child support invoice", "custody expenses", "receipt scanner", "unilateral parenting tools"],
   authors: [{ name: "FairShare" }],
   creator: "FairShare",
@@ -95,9 +96,11 @@ export default function RootLayout({
         )}>
           <AnnouncementBanner />
           <NavBar />
-          <main className="flex-1 pb-16 md:pb-0">
-            {children}
-          </main>
+          <PaddleProvider>
+            <main className="flex-1 pb-16 md:pb-0">
+              {children}
+            </main>
+          </PaddleProvider>
           <Toaster richColors position="bottom-right" />
         </body>
       </html>
