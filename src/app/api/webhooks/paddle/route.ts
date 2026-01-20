@@ -92,6 +92,7 @@ export async function POST(req: Request) {
             }
 
             case "subscription.canceled":
+            case "subscription.updated":
             case "subscription.past_due": {
                 const { custom_data, status } = event.data;
                 const userId = custom_data?.user_id;

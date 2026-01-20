@@ -8,7 +8,8 @@ interface PaddleEvent {
 }
 
 interface CheckoutOptions {
-    items: { priceId: string; quantity: number }[];
+    items?: { priceId: string; quantity: number }[];
+    transactionId?: string;
     customer?: {
         email?: string;
     };

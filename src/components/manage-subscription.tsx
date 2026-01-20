@@ -30,7 +30,6 @@ export function ManageSubscription({ subscriptionId }: ManageSubscriptionProps) 
 
             if (result.transactionId) {
                 openCheckout({
-                    // @ts-ignore
                     transactionId: result.transactionId,
                     settings: {
                         displayMode: "overlay",
