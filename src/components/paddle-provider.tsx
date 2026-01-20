@@ -93,8 +93,14 @@ export function PaddleProvider({ children }: { children: ReactNode }) {
 
 export const usePaddle = () => {
     const context = useContext(PaddleContext);
+    // Return a safe fallback during prerendering or if used outside provider
     if (context === undefined) {
-        throw new Error("usePaddle must be used within a PaddleProvider");
+        return {
+            isLoaded: false,
+            openCheckout: () => {
+                console.warn("Paddle not initialized");
+            },
+        };
     }
     return context;
 };
