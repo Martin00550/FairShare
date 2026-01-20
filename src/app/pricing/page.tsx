@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { Check, Zap, Shield, FileText, Sparkles, Receipt } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CreemCheckout } from "@creem_io/nextjs";
+import { usePaddle } from "@/components/paddle-provider";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
@@ -24,182 +25,158 @@ const features = {
 };
 
 export default function PricingPage() {
+    const { isLoaded, openCheckout } = usePaddle();
     const { user, isSignedIn } = useUser();
-    const productId = process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID;
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleUpgrade = () => {
+        if (!isSignedIn) {
+            // Redirect to sign up
+            window.location.href = "/sign-up?redirect=/pricing";
+            return;
+        }
+
+        setIsLoading(true);
+
+        const proPriceId = process.env.NEXT_PUBLIC_PADDLE_PRO_PRICE_ID;
+
+        if (!proPriceId) {
+            console.error("NEXT_PUBLIC_PADDLE_PRO_PRICE_ID not configured");
+            alert("Payment system not configured. Please contact support.");
+            setIsLoading(false);
+            return;
+        }
+
+        openCheckout({
+            items: [{ priceId: proPriceId, quantity: 1 }],
+            customer: {
+                email: user?.emailAddresses?.[0]?.emailAddress,
+            },
+            customData: {
+                user_id: user?.id || "",
+            },
+            settings: {
+                successUrl: `${window.location.origin}/dashboard?upgrade=success`,
+                displayMode: "overlay",
+            },
+        });
+
+        setIsLoading(false);
+    };
 
     return (
         <div className="min-h-screen bg-stone-50 pb-24 md:pb-8">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-                {/* Header */}
-                <div className="text-center mb-12">
-                    <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-100 text-indigo-700 text-sm font-bold rounded-full mb-4">
-                        <Sparkles className="w-4 h-4" />
-                        Simple Pricing
-                    </span>
-                    <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 font-serif mb-4">
-                        Choose Your Plan
-                    </h1>
-                    <p className="text-slate-500 max-w-xl mx-auto">
-                        Start free with 5 invoices. Upgrade to Pro for unlimited access to all features.
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+                <div className="text-center mb-16">
+                    <h1 className="text-4xl md:text-5xl font-bold text-slate-900 font-serif mb-4">Simple, Transparent Pricing</h1>
+                    <p className="text-xl text-slate-600 max-w-2xl mx-auto italic">
+                        Everything you need to keep your shared parenting finances transparent and court-ready.
                     </p>
                 </div>
 
-                {/* Pricing Cards */}
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     {/* Free Plan */}
-                    <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center">
-                                <Receipt className="w-6 h-6 text-slate-600" />
+                    <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm flex flex-col transition-all hover:shadow-md">
+                        <div className="p-8 border-b border-slate-100">
+                            <h2 className="text-xl font-bold text-slate-900 font-serif mb-2">Free Starter</h2>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-4xl font-bold text-slate-900">$0</span>
+                                <span className="text-slate-500">forever</span>
                             </div>
-                            <div>
-                                <h2 className="text-xl font-bold text-slate-900">Free</h2>
-                                <p className="text-sm text-slate-500">Get started today</p>
-                            </div>
+                            <p className="text-slate-500 mt-4 text-sm">Perfect for occasional expense tracking.</p>
                         </div>
-
-                        <div className="mb-6">
-                            <span className="text-4xl font-bold text-slate-900">$0</span>
-                            <span className="text-slate-500 ml-2">forever</span>
-                        </div>
-
-                        <ul className="space-y-3 mb-8">
-                            {features.free.map((feature) => (
-                                <li key={feature} className="flex items-start gap-3">
-                                    <Check className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
-                                    <span className="text-slate-700">{feature}</span>
-                                </li>
-                            ))}
-                        </ul>
-
-                        {isSignedIn ? (
+                        <div className="p-8 flex-1">
+                            <ul className="space-y-4 mb-8">
+                                {features.free.map((feature) => (
+                                    <li key={feature} className="flex items-start gap-3 text-slate-600 text-sm">
+                                        <Check className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                                        {feature}
+                                    </li>
+                                ))}
+                            </ul>
                             <Link href="/dashboard">
-                                <Button variant="outline" className="w-full h-12 font-bold rounded-xl">
-                                    Go to Dashboard
-                                </Button>
-                            </Link>
-                        ) : (
-                            <Link href="/sign-up">
-                                <Button variant="outline" className="w-full h-12 font-bold rounded-xl">
+                                <Button variant="outline" className="w-full h-12 border-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-50">
                                     Get Started Free
                                 </Button>
                             </Link>
-                        )}
+                        </div>
                     </div>
 
                     {/* Pro Plan */}
-                    <div className="bg-slate-900 rounded-2xl p-8 shadow-xl relative overflow-hidden">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
-                                <Zap className="w-6 h-6 text-white" />
-                            </div>
-                            <div>
-                                <h2 className="text-xl font-bold text-white">Pro</h2>
-                                <p className="text-sm text-slate-400">Unlimited everything</p>
-                            </div>
+                    <div className="bg-white rounded-3xl border-2 border-indigo-500 overflow-hidden shadow-xl flex flex-col relative scale-105 z-10">
+                        <div className="absolute top-4 right-4 bg-indigo-500 text-white text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                            <Zap className="w-3 h-3 fill-current" />
+                            MOST POPULAR
                         </div>
 
-                        <div className="mb-6">
-                            <span className="text-4xl font-bold text-white">$9</span>
-                            <span className="text-slate-400 ml-2">/month</span>
+                        <div className="p-8 border-b border-slate-100 bg-indigo-50/30">
+                            <h2 className="text-xl font-bold text-slate-900 font-serif mb-2">FairShare Pro</h2>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-4xl font-bold text-slate-900">$9</span>
+                                <span className="text-slate-500">/per month</span>
+                            </div>
+                            <p className="text-slate-500 mt-4 text-sm">Full access to simplify your co-parenting life.</p>
                         </div>
 
-                        <ul className="space-y-3 mb-8">
-                            {features.pro.map((feature) => (
-                                <li key={feature} className="flex items-start gap-3">
-                                    <Check className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" />
-                                    <span className="text-slate-300">{feature}</span>
-                                </li>
-                            ))}
-                        </ul>
+                        <div className="p-8 flex-1">
+                            <ul className="space-y-4 mb-8">
+                                {features.pro.map((feature) => (
+                                    <li key={feature} className="flex items-start gap-3 text-slate-900 text-sm font-medium">
+                                        <div className="w-5 h-5 bg-emerald-50 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                                            <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                        </div>
+                                        {feature}
+                                    </li>
+                                ))}
+                            </ul>
 
-                        {isSignedIn && productId ? (
-                            <CreemCheckout
-                                productId={productId}
-                                successUrl={typeof window !== 'undefined' ? `${window.location.origin}/dashboard?upgrade=success` : '/dashboard?upgrade=success'}
-                                referenceId={user?.id || ""}
-                                customer={{
-                                    email: user?.emailAddresses?.[0]?.emailAddress || "",
-                                    name: user?.fullName || "",
-                                }}
+                            <Button
+                                onClick={handleUpgrade}
+                                disabled={!isLoaded || isLoading}
+                                className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl shadow-lg shadow-indigo-900/50"
                             >
-                                <Button
-                                    className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl shadow-lg shadow-indigo-900/50"
-                                >
-                                    Upgrade to Pro
-                                </Button>
-                            </CreemCheckout>
-                        ) : (
-                            <Link href="/sign-up?redirect=/pricing">
-                                <Button
-                                    className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl shadow-lg shadow-indigo-900/50"
-                                >
-                                    Sign Up to Upgrade
-                                </Button>
-                            </Link>
-                        )}
+                                {isLoading ? "Loading..." : "Upgrade to Pro"}
+                            </Button>
 
-                        <p className="text-center text-xs text-slate-500 mt-3">
-                            Cancel anytime
+                            <p className="text-center text-xs text-slate-500 mt-3">
+                                Cancel anytime
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Benefits Section */}
+                <div className="mt-24 grid sm:grid-cols-3 gap-12 text-center max-w-5xl mx-auto">
+                    <div className="flex flex-col items-center">
+                        <div className="w-14 h-14 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center mb-6">
+                            <Shield className="w-7 h-7 text-indigo-500" />
+                        </div>
+                        <h3 className="font-bold text-slate-900 mb-2 font-serif text-lg">Court Ready</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">
+                            Generate professional, audit-proof reports that lawyers and mediators trust.
                         </p>
+                    </div>
 
-                        {/* Decorative glow */}
-                        <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-indigo-600/30 rounded-full blur-3xl" />
+                    <div className="flex flex-col items-center">
+                        <div className="w-14 h-14 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center mb-6">
+                            <Sparkles className="w-7 h-7 text-indigo-500" />
+                        </div>
+                        <h3 className="font-bold text-slate-900 mb-2 font-serif text-lg">AI Categorization</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">
+                            Stop manual entry. Let our AI sort your expenses into court-recognized categories.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col items-center">
+                        <div className="w-14 h-14 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center mb-6">
+                            <Receipt className="w-7 h-7 text-indigo-500" />
+                        </div>
+                        <h3 className="font-bold text-slate-900 mb-2 font-serif text-lg">Tax Compliant</h3>
+                        <p className="text-slate-500 text-sm leading-relaxed">
+                            Full breakdown of totals for your annual tax and child support documentation.
+                        </p>
                     </div>
                 </div>
-
-                {/* Trust Badges */}
-                <div className="mt-16 text-center">
-                    <div className="flex flex-wrap items-center justify-center gap-8 text-slate-400">
-                        <div className="flex items-center gap-2">
-                            <Shield className="w-5 h-5" />
-                            <span className="text-sm font-medium">256-bit SSL Encryption</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <FileText className="w-5 h-5" />
-                            <span className="text-sm font-medium">Court-Ready Documents</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Zap className="w-5 h-5" />
-                            <span className="text-sm font-medium">Instant PDF Generation</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* FAQ Section */}
-                <div className="mt-20 max-w-2xl mx-auto">
-                    <h2 className="text-2xl font-bold text-slate-900 font-serif text-center mb-8">
-                        Frequently Asked Questions
-                    </h2>
-                    <div className="space-y-6">
-                        <div className="bg-white rounded-xl border border-slate-200 p-6">
-                            <h3 className="font-bold text-slate-900 mb-2">Can I cancel anytime?</h3>
-                            <p className="text-slate-500 text-sm">
-                                Yes! You can cancel your Pro subscription at any time. You'll continue to have access until the end of your billing period.
-                            </p>
-                        </div>
-                        <div className="bg-white rounded-xl border border-slate-200 p-6">
-                            <h3 className="font-bold text-slate-900 mb-2">What happens to my data if I cancel?</h3>
-                            <p className="text-slate-500 text-sm">
-                                Your expenses and documents remain safely stored. You just won't be able to generate new invoices beyond the free limit.
-                            </p>
-                        </div>
-                        <div className="bg-white rounded-xl border border-slate-200 p-6">
-                            <h3 className="font-bold text-slate-900 mb-2">Is my information secure?</h3>
-                            <p className="text-slate-500 text-sm">
-                                Absolutely. We use bank-level encryption and your co-parent never sees your activity or login information.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* AI Disclosure */}
-            <div className="max-w-3xl mx-auto px-6 pb-20">
-                <p className="text-center text-xs text-slate-400 leading-relaxed">
-                    <span className="font-bold text-slate-500 uppercase tracking-wider block mb-1 text-[10px]">AI Disclosure</span>
-                    FairShare is an independent service built on top of advanced AI models. We are an independent product and are not affiliated with, endorsed by, or sponsored by Google, OpenAI, or any other model providers.
-                </p>
             </div>
         </div>
     );

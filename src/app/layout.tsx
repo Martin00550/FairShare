@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     default: "FairShare - Co-Parenting Expense Tracker & Child Support Logs",
     template: "%s | FairShare"
   },
-  description: "Stop adding up receipts. Start getting reimbursed. The stress-free way to manage shared expenses and create unilateral child support invoice documentation.",
+    description: "Stop adding up receipts. Start getting reimbursed. Organize shared expenses and create professional invoice documentation.",
   keywords: ["co-parenting app", "expense tracker", "child support invoice", "custody expenses", "receipt scanner", "unilateral parenting tools"],
   authors: [{ name: "FairShare" }],
   creator: "FairShare",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://getfairshare.cloud",
     title: "FairShare - Track Co-Parenting Expenses & Generate Invoices",
-    description: "The easiest way to track reusable co-parenting expenses. Scan receipts, generate professional PDFs, and keep a perfect audit trail.",
+    description: "Track shared co-parenting expenses. Scan receipts, generate PDF invoices, and keep organized records.",
     siteName: "FairShare",
     images: [{
       url: "/og-image.jpg", // We'll need to make sure this exists or use a default

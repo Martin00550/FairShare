@@ -167,8 +167,8 @@ export default async function Dashboard() {
                                             <div className="inline-flex items-center px-4 py-1.5 bg-emerald-400/20 backdrop-blur-md text-emerald-300 text-[10px] font-black rounded-full border border-emerald-400/30 shadow-sm uppercase tracking-widest">
                                                 Unlimited
                                             </div>
-                                            <p className="text-[15px] text-indigo-50 font-medium leading-relaxed max-w-[240px]">
-                                                Enjoy unlimited <span className="font-bold text-white underline underline-offset-4 decoration-indigo-400/50">invoices</span>, unlimited history, and court-ready reports.
+                            <p className="text-[15px] text-indigo-50 font-medium leading-relaxed max-w-[240px]">
+                                                Enjoy unlimited <span className="font-bold text-white underline underline-offset-4 decoration-indigo-400/50">invoices</span>, unlimited history, and organized reports.
                                             </p>
                                         </>
                                     ) : (
@@ -198,7 +198,7 @@ export default async function Dashboard() {
                                                 </Link>
                                             ) : (
                                                 <p className="text-[14px] text-indigo-100 font-medium leading-relaxed">
-                                                    Upgrade to Pro for <span className="font-bold text-white underline underline-offset-4 decoration-white/30">unlimited invoice generation</span>.
+                                                    Upgrade to Pro for <span className="font-bold text-white underline underline-offset-4 decoration-white/30">unlimited invoices</span>.
                                                 </p>
                                             )}
                                         </>
@@ -255,7 +255,7 @@ export default async function Dashboard() {
                         </div>
                         <div>
                             <h3 className="text-slate-900 font-bold">Generate Invoice</h3>
-                            <p className="text-slate-500 text-sm">Create a professional PDF report</p>
+                            <p className="text-slate-500 text-sm">Create a professional PDF invoice</p>
                         </div>
                     </Link>
                 </div>

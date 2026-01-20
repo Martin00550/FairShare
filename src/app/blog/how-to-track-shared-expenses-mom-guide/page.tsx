@@ -41,7 +41,7 @@ export default function MomsGuideToExpensesPage() {
                         The Mom&apos;s Guide to <span className="text-indigo-400">Undeniable</span> Tracking
                     </h1>
                     <p className="text-xl text-slate-300 leading-relaxed max-w-2xl font-light">
-                        Stop the &quot;reimbursement dance&quot; and turn financial chaos into a professional, court-ready audit trail.
+                        Stop the &quot;reimbursement dance&quot; and turn financial chaos into a professional, organized audit trail.
                     </p>
                 </div>
             </header>
@@ -69,9 +69,8 @@ export default function MomsGuideToExpensesPage() {
                             the text. Then the reminder. Then the argument.
                         </p>
                         <div className="bg-white rounded-2xl border-l-4 border-rose-500 p-8 shadow-sm italic text-slate-700">
-                            &quot;The $450 Camp Bill story happens to everyone. You pay it, they ignore the text,
-                            and by the time you reach mediation, the money has practically disappeared
-                            because you can&apos;t find the receipt.&quot;
+                            &quot;The $450 Camp Bill story is common. You pay it, they ignore the text,
+                            and by the time you reach mediation, you have disorganized records and can&apos;t find the receipt.&quot;
                         </div>
                     </div>
                 </section>
@@ -91,7 +90,7 @@ export default function MomsGuideToExpensesPage() {
                             </div>
                             <h3 className="text-lg font-bold text-slate-900 mb-3">Text Messages</h3>
                             <p className="text-slate-600 text-sm leading-relaxed font-light">
-                                &quot;I bought soccer gear, you owe $50.&quot; Just words. No receipt. Easily ignored or denied in court as hearsay.
+                                &quot;I bought soccer gear, you owe $50.&quot; Just words. No receipt. Difficult to organize and verify.
                             </p>
                         </div>
                         <div className="group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-xl hover:border-amber-200 transition-all duration-300">
@@ -100,7 +99,7 @@ export default function MomsGuideToExpensesPage() {
                             </div>
                             <h3 className="text-lg font-bold text-slate-900 mb-3">Spreadsheets</h3>
                             <p className="text-slate-600 text-sm leading-relaxed font-light">
-                                Numbers typed in a list with loose photos. Difficult for a clerk to audit and verify against merchant timestamps.
+                                Numbers typed in a list with loose photos. Difficult to organize and verify against merchant timestamps.
                             </p>
                         </div>
                         <div className="group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
@@ -109,7 +108,7 @@ export default function MomsGuideToExpensesPage() {
                             </div>
                             <h3 className="text-lg font-bold text-slate-900 mb-3">FairShare Ledger</h3>
                             <p className="text-slate-600 text-sm leading-relaxed font-light">
-                                Every expense itemized, totaled by percentage, with high-res merchant receipts appended directly to the report.
+                                Every expense itemized, totaled by percentage, with merchant receipts appended directly to the report.
                             </p>
                         </div>
                     </div>
@@ -159,9 +158,9 @@ export default function MomsGuideToExpensesPage() {
                         <div>
                             <h3 className="text-2xl font-bold mb-4">A Note on the Burden of Proof</h3>
                             <p className="text-slate-400 text-lg leading-relaxed font-light">
-                                In family court, typed numbers are just hearsay. Without the original merchant receipt
+                                In legal proceedings, having organized documentation with receipts helps substantiate your expenses. Without the original merchant receipt
                                 to clarify the <strong className="text-white font-bold italic underline">date, merchant, and individual items purchased</strong>,
-                                any co-parent can challenge the validity of your records.
+                                co-parents can more easily challenge your records.
                             </p>
                         </div>
                     </div>
@@ -202,9 +201,9 @@ export default function MomsGuideToExpensesPage() {
                         <h3 className="text-3xl md:text-4xl font-bold mb-4">
                             Stop Being a Debt Collector
                         </h3>
-                        <p className="text-indigo-200 mb-8 max-w-lg mx-auto font-light leading-relaxed">
-                            Experience the relief of knowing your records are perfect. Shift from arguments to professional reports today for free.
-                        </p>
+                            <p className="text-indigo-200 mb-8 max-w-lg mx-auto font-light leading-relaxed">
+                                Experience the relief of knowing your records are organized. Shift from arguments to professional reports today for free.
+                            </p>
                         <Link href="/">
                             <Button size="lg" className="h-14 px-10 text-lg font-bold rounded-xl bg-white text-indigo-700 hover:bg-slate-100 shadow-2xl group transition-all hover:scale-105 active:scale-95">
                                 Start Tracking Free

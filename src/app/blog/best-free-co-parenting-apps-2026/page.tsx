@@ -17,9 +17,9 @@ const apps = [
         rank: 1,
         name: "FairShare",
         rating: 5,
-        bestFor: "Expense Tracking & Court-Ready Invoices",
-        description: "A specialized expense tracking tool for co-parents. FairShare focuses on one thing: creating professional, court-ready invoices from scanned receipts. It works unilaterally, meaning you don't need your co-parent's cooperation to use it.",
-        pros: ["AI receipt scanning", "Court-ready PDF invoices", "No invite required (unilateral)", "100% free core features"],
+        bestFor: "Expense Tracking & Professional Invoices",
+        description: "A specialized expense tracking tool for co-parents. FairShare focuses on one thing: creating professional, organized invoices from scanned receipts. It works unilaterally, meaning you don't need your co-parent's cooperation to use it.",
+        pros: ["AI receipt scanning", "Organized PDF invoices", "No invite required (unilateral)", "Free tier with 3 invoices"],
         cons: ["No built-in messaging", "No shared calendar"],
         cta: "Try FairShare Free",
         href: "/",
@@ -100,11 +100,11 @@ export default function BestFreeAppsPage() {
                         <span className="text-slate-600">•</span>
                         <span className="text-slate-400">10 min read</span>
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
-                        The 5 Best Free <span className="text-indigo-400">Co-Parenting Apps</span> in 2026
+                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+                        5 Co-Parenting Apps <span className="text-indigo-400">Compared</span> for 2026
                     </h1>
                     <p className="text-xl text-slate-300 leading-relaxed max-w-2xl font-light">
-                        A factual comparison of the top co-parenting tools available today, ranked by their core features for communication, scheduling, and expense tracking.
+                        A comparison of co-parenting tools available today, evaluated on communication, scheduling, and expense tracking features.
                     </p>
                 </div>
             </header>
@@ -233,7 +233,7 @@ export default function BestFreeAppsPage() {
                                 Need Expense Documentation
                             </div>
                             <p className="text-slate-600 text-sm leading-relaxed">
-                                If your primary need is tracking shared expenses and creating court-ready invoices, <strong>FairShare</strong> is designed specifically for this, and works without your co-parent&apos;s involvement.
+                                If your primary need is tracking shared expenses and creating professional invoices, <strong>FairShare</strong> is designed specifically for this, and works without your co-parent&apos;s involvement.
                             </p>
                         </div>
                     </div>
@@ -252,7 +252,7 @@ export default function BestFreeAppsPage() {
                             Start Tracking Expenses for Free
                         </h3>
                         <p className="text-indigo-200 mb-8 max-w-lg mx-auto font-light">
-                            FairShare is 100% free for core expense tracking and invoice generation. Create your first professional report in minutes.
+                            FairShare offers a free tier with 3 invoices and full expense tracking. Create your first report in minutes.
                         </p>
                         <Link href="/">
                             <Button size="lg" className="h-14 px-10 text-lg font-bold rounded-xl bg-white text-indigo-700 hover:bg-slate-100 shadow-2xl group transition-all hover:scale-105 active:scale-95 leading-none">

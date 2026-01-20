@@ -36,7 +36,7 @@ export default function SampleInvoicePage() {
 
             {/* Bottom Note */}
             <div className="mt-8 text-center text-slate-500 text-sm italic">
-                This is a visual preview of FairShare's court-ready PDF generation.
+                This is a visual preview of FairShare's organized PDF generation.
             </div>
         </div>
     );

@@ -100,10 +100,10 @@ export default function WhyTextsFailPage() {
                                 <FileWarning className="w-7 h-7 text-white" />
                             </div>
                             <h3 className="text-lg font-bold text-slate-900 mb-3">No Verifiable Proof</h3>
-                            <p className="text-slate-600 text-sm leading-relaxed">
-                                A text that says &quot;I spent $200 at the dentist&quot; is just words. Without the
-                                <strong> merchant receipt</strong> attached, it is your word against theirs.
-                            </p>
+                        <p className="text-slate-600 text-sm leading-relaxed">
+                            A text that says &quot;I spent $200 at the dentist&quot; is just words. Without the
+                            <strong> merchant receipt</strong> attached, it can be difficult to verify the expense.
+                        </p>
                         </div>
                         <div className="group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
                             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
@@ -211,8 +211,7 @@ export default function WhyTextsFailPage() {
                     <div className="pl-0 md:pl-16 bg-white rounded-2xl border border-slate-200 p-6">
                         <p className="font-bold text-slate-900 mb-2">&quot;What if they get mad that I&apos;m sending an invoice?&quot;</p>
                         <p className="text-slate-600 leading-relaxed">
-                            They might. High-conflict individuals often prefer the &quot;messiness&quot; of texts because it offers more chances for engagement.
-                            Simply state: <em>&quot;To keep our records better organized for the court, I&apos;ll be sending all reimbursement requests via monthly PDF reports from now on.&quot;</em>
+                            Experience the peace of mind that comes with professional, organized documentation.
                         </p>
                     </div>
                 </section>
@@ -227,7 +226,7 @@ export default function WhyTextsFailPage() {
                             Stop the Texting Chaos
                         </h3>
                         <p className="text-indigo-200 mb-8 max-w-lg mx-auto">
-                            Experience the peace of mind that comes with professional, court-ready documentation.
+                            Experience the peace of mind that comes with professional, organized documentation.
                         </p>
                         <Link href="/">
                             <Button size="lg" className="h-14 px-10 text-lg font-bold rounded-xl bg-white text-indigo-700 hover:bg-indigo-50 shadow-2xl group">

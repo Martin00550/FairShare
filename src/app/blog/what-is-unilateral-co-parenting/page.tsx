@@ -106,9 +106,9 @@ export default function UnilateralCoParentingPage() {
                             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-400 to-indigo-500 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
                                 <Milestone className="w-7 h-7 text-white" />
                             </div>
-                            <h3 className="text-lg font-bold text-slate-900 mb-3">Court-First Design</h3>
+                            <h3 className="text-lg font-bold text-slate-900 mb-3">Documentation-First Design</h3>
                             <p className="text-slate-600 text-sm leading-relaxed">
-                                Legacy apps try to be a &quot;Social Network&quot; for parents. FairShare is a &quot;Financial Ledger&quot; for the justice system.
+                                Legacy apps try to be a &quot;Social Network&quot; for parents. FairShare is a &quot;Financial Ledger&quot; for organized record-keeping.
                             </p>
                         </div>
                     </div>

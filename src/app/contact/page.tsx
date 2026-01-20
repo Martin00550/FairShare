@@ -24,7 +24,7 @@ export default function ContactPage() {
                             </div>
                             <h1 className="text-4xl font-bold font-serif text-slate-900 italic">Get in Touch</h1>
                             <p className="text-lg text-slate-600 leading-relaxed">
-                                Have questions about FairShare? We're here to help you professionalize your co-parenting finances.
+                                Have questions about FairShare? We're here to help you organize your co-parenting finances.
                             </p>
                         </div>
 

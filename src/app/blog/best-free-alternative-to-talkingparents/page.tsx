@@ -128,7 +128,7 @@ export default function TalkingParentsAlternativePage() {
                                 {[
                                     { f: "Core Expense Tracking", fs: "Free & Unlimited", tp: "Limited Free" },
                                     { f: "AI Receipt Scanning", fs: true, tp: false },
-                                    { f: "Court-Ready PDF Reports", fs: true, tp: "Paid Only" },
+                                    { f: "Organized PDF Reports", fs: true, tp: "Paid Only" },
                                     { f: "Mobile App Access", fs: "Free", tp: "Paid Only" },
                                     { f: "Unilateral (Solo) Use", fs: true, tp: false },
                                 ].map((row, i) => (

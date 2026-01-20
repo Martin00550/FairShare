@@ -16,7 +16,7 @@ async function getProfileData(userId: string) {
     // Get profile data
     const { data: profile } = await supabaseAdmin
         .from("profiles")
-        .select("is_pro, lifetime_invoices_count, split_percentage, payment_instructions, creem_customer_id")
+        .select("is_pro, lifetime_invoices_count, split_percentage, payment_instructions, paddle_subscription_id")
         .eq("id", userId)
         .single();
 
@@ -34,7 +34,7 @@ async function getProfileData(userId: string) {
         invoicesUsed: profile?.lifetime_invoices_count || 0,
         splitPercentage: profile?.split_percentage || 50,
         paymentInstructions: profile?.payment_instructions || "",
-        creemCustomerId: profile?.creem_customer_id || "",
+        paddleSubscriptionId: profile?.paddle_subscription_id || "",
         receiptCount,
         totalTracked,
     };
@@ -51,7 +51,7 @@ export default async function ProfilePage() {
         );
     }
 
-    const { isPro, invoicesUsed, splitPercentage, paymentInstructions, creemCustomerId, receiptCount, totalTracked } = await getProfileData(user.id);
+    const { isPro, invoicesUsed, splitPercentage, paymentInstructions, paddleSubscriptionId, receiptCount, totalTracked } = await getProfileData(user.id);
 
     async function handleSplitSave(newSplit: number) {
         "use server";
@@ -137,18 +137,18 @@ export default async function ProfilePage() {
                                         <span className="font-bold text-slate-900">Pro Account</span>
                                         <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full">ACTIVE</span>
                                     </div>
-                                    <p className="text-sm text-slate-500 mt-1">Unlimited invoices, history, and court-ready reports.</p>
+                                    <p className="text-sm text-slate-500 mt-1">Unlimited invoices, history, and organized reports.</p>
                                     <div className="mt-4 flex flex-col gap-2">
-                                        {creemCustomerId ? (
+                                        {paddleSubscriptionId ? (
                                             <>
-                                                <ManageSubscription customerId={creemCustomerId} />
+                                                <ManageSubscription subscriptionId={paddleSubscriptionId} />
                                                 <p className="text-[11px] text-slate-400">
                                                     Update payment methods or manage your subscription at any time.
                                                 </p>
                                             </>
                                         ) : (
                                             <p className="text-sm text-slate-500 italic">
-                                                Manage your subscription via the email link provided by Creem.
+                                                Manage your subscription via the email link provided by Paddle.
                                             </p>
                                         )}
                                     </div>

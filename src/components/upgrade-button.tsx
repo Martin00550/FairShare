@@ -1,40 +1,63 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CreemCheckout } from "@creem_io/nextjs";
+import { usePaddle } from "@/components/paddle-provider";
 import { useUser } from "@clerk/nextjs";
+import { Loader2 } from "lucide-react";
 
 interface UpgradeButtonProps {
     className?: string;
 }
 
 export function UpgradeButton({ className }: UpgradeButtonProps) {
+    const { isLoaded, openCheckout } = usePaddle();
     const { user } = useUser();
-    const productId = process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID;
+    const [isLoading, setIsLoading] = useState(false);
 
-    if (!productId) {
-        return (
-            <Button disabled className={className || "mt-4 bg-indigo-600"}>
-                Upgrade Not Configured
-            </Button>
-        );
-    }
+    const handleUpgrade = () => {
+        setIsLoading(true);
+
+        const proPriceId = process.env.NEXT_PUBLIC_PADDLE_PRO_PRICE_ID;
+
+        if (!proPriceId) {
+            console.error("NEXT_PUBLIC_PADDLE_PRO_PRICE_ID not configured");
+            alert("Payment system not configured. Please contact support.");
+            setIsLoading(false);
+            return;
+        }
+
+        openCheckout({
+            items: [{ priceId: proPriceId, quantity: 1 }],
+            customer: {
+                email: user?.emailAddresses?.[0]?.emailAddress,
+            },
+            customData: {
+                user_id: user?.id || "",
+            },
+            settings: {
+                successUrl: `${window.location.origin}/dashboard?upgrade=success`,
+                displayMode: "overlay",
+            },
+        });
+
+        setIsLoading(false);
+    };
 
     return (
-        <CreemCheckout
-            productId={productId}
-            successUrl={`${typeof window !== 'undefined' ? window.location.origin : ''}/dashboard?upgrade=success`}
-            referenceId={user?.id || ""}
-            customer={{
-                email: user?.emailAddresses?.[0]?.emailAddress || "",
-                name: user?.fullName || "",
-            }}
+        <Button
+            onClick={handleUpgrade}
+            disabled={!isLoaded || isLoading}
+            className={className || "mt-4 bg-indigo-600 hover:bg-indigo-700"}
         >
-            <Button
-                className={className || "mt-4 bg-indigo-600 hover:bg-indigo-700"}
-            >
-                Upgrade to Pro - $9/mo
-            </Button>
-        </CreemCheckout>
+            {isLoading ? (
+                <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Loading...
+                </>
+            ) : (
+                "Upgrade to Pro - $9/mo"
+            )}
+        </Button>
     );
 }

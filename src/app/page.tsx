@@ -23,7 +23,7 @@ export default async function Home() {
       "price": "0",
       "priceCurrency": "USD"
     },
-    "description": "The stress-free way to manage shared co-parenting expenses and generate unilateral child support invoices.",
+    "description": "Organize shared co-parenting expenses and generate professional invoices.",
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.8",
@@ -99,7 +99,7 @@ export default async function Home() {
                 Just Send The Invoice.
               </h1>
               <p className="text-lg md:text-xl text-slate-600 font-normal leading-relaxed max-w-lg">
-                Don't let your money disappear in a text thread. Turn your shoebox of receipts into a clear audit trail that documents exactly what you are owed.
+                Turn your shoebox of receipts into an organized audit trail that documents exactly what you are owed.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -123,10 +123,10 @@ export default async function Home() {
                 </Button>
               </Link>
             </div>
-            <div className="flex items-center gap-3 text-sm text-slate-500 font-medium">
-              <ShieldCheck className="w-5 h-5 text-emerald-500" />
-              Professional Documentation Standard
-            </div>
+              <div className="flex items-center gap-3 text-sm text-slate-500 font-medium">
+                <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                Organized Documentation System
+              </div>
           </div>
 
           {/* Hero Visual - Problem-Only (The Text Chaos) */}
@@ -203,7 +203,7 @@ export default async function Home() {
           <div className="flex flex-col gap-4 max-w-3xl">
             <span className="text-indigo-600 font-bold text-sm uppercase tracking-widest">Mechanism Proof</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight font-serif">The Architecture of Accountability</h2>
-            <p className="text-slate-600 text-lg">FairShare isn&apos;t just an app; it&apos;s a documentation engine designed to meet the rigorous standards required for financial clarity.</p>
+            <p className="text-slate-600 text-lg">FairShare helps you maintain organized, professional records of shared expenses with clear documentation and attached receipts.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -220,7 +220,7 @@ export default async function Home() {
               {
                 icon: FileText,
                 title: "Permanent History",
-                desc: "Every invoice and attached receipt creates a permanent digital audit trail that proves when and what was shared, removing 'I never saw that' as an excuse."
+                desc: "Every invoice and attached receipt creates a digital audit trail that documents when and what was shared, helping provide evidence for your records."
               }
             ].map((item, i) => (
               <div key={i} className="bg-stone-50 p-8 rounded-2xl border border-slate-100 flex flex-col gap-4 hover:shadow-xl transition-shadow group">
@@ -282,7 +282,7 @@ export default async function Home() {
         <div className="max-w-4xl mx-auto px-6 text-center space-y-16 relative z-10">
           <div className="space-y-4">
             <h2 className="text-4xl font-bold tracking-tight font-serif">Simple, honest pricing</h2>
-            <p className="text-indigo-200 text-xl">Start for free, upgrade when you realize how much peace of mind you have.</p>
+            <p className="text-indigo-200 text-xl">Start for free, upgrade when you need unlimited invoices and full history.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto text-left">
@@ -358,7 +358,7 @@ export default async function Home() {
             {[
               {
                 q: "Is FairShare documentation court-ready?",
-                a: "Yes. FairShare generates standardized, professional PDF invoices with attached receipt evidence and timestamps. Lawyers and judges prefer this 'digital paper trail' over messy text message threads or handwritten lists."
+                a: "FairShare generates standardized, professional PDF invoices with attached receipt evidence and timestamps. This organized documentation may be useful for record-keeping purposes. Always consult with your attorney about specific evidence requirements in your jurisdiction."
               },
               {
                 q: "Can I use FairShare even if my co-parent refuses to use it?",
@@ -366,11 +366,11 @@ export default async function Home() {
               },
               {
                 q: "How does the AI receipt scanning work?",
-                a: "When you upload a photo or PDF of a receipt, our AI automatically extracts the date, vendor, category, and total amount. This reduces manual entry errors and ensures your records are consistently formatted."
+                a: "When you upload a photo or PDF of a receipt, our system uses AI to automatically extract the date, vendor, category, and total amount. This reduces manual entry errors and helps ensure your records are consistently formatted."
               },
               {
                 q: "Is my data and my child's information secure?",
-                a: "Security is our priority. We use industry-standard encryption, secure authentication via Clerk, and protected cloud storage for all sensitive documents and data."
+                a: "We use secure authentication via Clerk and protected cloud storage for all sensitive documents and data. We employ standard security measures to protect your information."
               },
               {
                 q: "Do I need an invite from my co-parent to start?",

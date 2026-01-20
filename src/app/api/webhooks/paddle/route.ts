@@ -7,53 +7,23 @@ const supabaseAdmin = createClient(
     process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-interface PaddleWebhookEvent {
-    event_type: string;
-    data: {
-        id: string;
-        customer_id: string;
-        status?: string;
-        custom_data?: {
-            user_id?: string;
-        };
-        items?: Array<{
-            price: {
-                id: string;
-            };
-        }>;
-    };
+function verifyPaddleSignature(payload: string, signature: string, secret: string) {
+    const [tsPart, hPart] = signature.split(";");
+    const ts = tsPart.split("=")[1];
+    const h = hPart.split("=")[1];
+
+    const signedPayload = `${ts}:${payload}`;
+    const computedH = crypto
+        .createHmac("sha256", secret)
+        .update(signedPayload)
+        .digest("hex");
+
+    return computedH === h;
 }
 
-// Verify Paddle webhook signature
-function verifyPaddleSignature(payload: string, signature: string, secret: string): boolean {
-    try {
-        // Paddle uses ts;h1= format for signatures
-        const parts = signature.split(";");
-        const ts = parts.find(p => p.startsWith("ts="))?.split("=")[1];
-        const h1 = parts.find(p => p.startsWith("h1="))?.split("=")[1];
-
-        if (!ts || !h1) {
-            console.error("Invalid signature format");
-            return false;
-        }
-
-        // Create the signed payload
-        const signedPayload = `${ts}:${payload}`;
-
-        // Compute HMAC
-        const expectedSignature = crypto
-            .createHmac("sha256", secret)
-            .update(signedPayload)
-            .digest("hex");
-
-        return crypto.timingSafeEqual(
-            Buffer.from(h1),
-            Buffer.from(expectedSignature)
-        );
-    } catch (error) {
-        console.error("Signature verification error:", error);
-        return false;
-    }
+interface PaddleWebhookEvent {
+    event_type: string;
+    data: any;
 }
 
 export async function POST(req: Request) {
@@ -64,7 +34,6 @@ export async function POST(req: Request) {
         return new Response("Webhook secret not configured", { status: 500 });
     }
 
-    // Get the signature header
     const headerPayload = await headers();
     const signature = headerPayload.get("paddle-signature");
 
@@ -72,10 +41,8 @@ export async function POST(req: Request) {
         return new Response("Missing Paddle signature", { status: 400 });
     }
 
-    // Get the raw body
     const payload = await req.text();
 
-    // Verify signature
     const isValid = verifyPaddleSignature(payload, signature, WEBHOOK_SECRET);
 
     if (!isValid) {
@@ -83,7 +50,6 @@ export async function POST(req: Request) {
         return new Response("Invalid signature", { status: 400 });
     }
 
-    // Parse the event
     let event: PaddleWebhookEvent;
     try {
         event = JSON.parse(payload);
@@ -106,7 +72,6 @@ export async function POST(req: Request) {
                     return new Response("Missing user_id", { status: 400 });
                 }
 
-                // Update user to Pro status
                 const { error } = await supabaseAdmin
                     .from("profiles")
                     .update({
@@ -136,11 +101,11 @@ export async function POST(req: Request) {
                     return new Response("Missing user_id", { status: 400 });
                 }
 
-                // Update subscription status but keep Pro until period ends
                 const { error } = await supabaseAdmin
                     .from("profiles")
                     .update({
                         subscription_status: status || "canceled",
+                        is_pro: status === "active" || status === "trialing",
                     })
                     .eq("id", userId);
 
@@ -149,24 +114,7 @@ export async function POST(req: Request) {
                     return new Response("Error updating profile", { status: 500 });
                 }
 
-                console.log(`User ${userId} subscription status: ${status}`);
-                break;
-            }
-
-            case "subscription.paused":
-            case "subscription.updated": {
-                const { custom_data, status } = event.data;
-                const userId = custom_data?.user_id;
-
-                if (userId && status) {
-                    await supabaseAdmin
-                        .from("profiles")
-                        .update({
-                            subscription_status: status,
-                            is_pro: status === "active",
-                        })
-                        .eq("id", userId);
-                }
+                console.log(`User ${userId} subscription status updated to ${status}`);
                 break;
             }
 
@@ -174,9 +122,10 @@ export async function POST(req: Request) {
                 console.log(`Unhandled Paddle event type: ${eventType}`);
         }
 
-        return new Response("Webhook processed successfully", { status: 200 });
+        return new Response("Webhook processed", { status: 200 });
+
     } catch (error) {
-        console.error("Paddle webhook processing error:", error);
-        return new Response("Webhook processing failed", { status: 500 });
+        console.error("Error processing Paddle webhook:", error);
+        return new Response("Internal Server Error", { status: 500 });
     }
 }

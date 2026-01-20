@@ -60,7 +60,7 @@ export default function PrivacyPolicy() {
                         <h2 className="text-2xl font-bold font-serif text-slate-900">4. Data Storage and Security</h2>
                         <p>
                             We take the security of your data seriously. Your information is stored securely in our database (Supabase)
-                            and any uploaded files are kept in protected cloud storage. We use industry-standard encryption to protect
+                            and any uploaded files are kept in protected cloud storage. We use encryption to protect
                             your data during transmission and at rest.
                         </p>
                     </section>
