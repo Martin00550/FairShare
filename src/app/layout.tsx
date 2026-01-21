@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     description: "Track shared co-parenting expenses. Scan receipts, generate PDF invoices, and keep organized records.",
     siteName: "FairShare",
     images: [{
-      url: "/og-image.jpg", // We'll need to make sure this exists or use a default
+      url: "/og-image.jpg",
       width: 1200,
       height: 630,
       alt: "FairShare Dashboard Preview"
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "FairShare - Co-Parenting Expense Tracker",
     description: "Turn your shoebox of receipts into a clear audit trail. Professional invoicing for co-parents.",
-    images: ["/og-image.jpg"], // reusing OG image
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -53,6 +53,9 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+  },
+  alternates: {
+    canonical: 'https://getfairshare.cloud',
   },
 };
 
