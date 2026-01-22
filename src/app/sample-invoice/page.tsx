@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Download, Printer } from "lucide-react";
+import { ChevronLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function SampleInvoicePage() {
@@ -13,22 +13,18 @@ export default function SampleInvoicePage() {
                         Back to Home
                     </Button>
                 </Link>
-                <div className="flex gap-3">
-                    <Button variant="outline" className="bg-white border-slate-200 gap-2">
-                        <Printer className="w-4 h-4" />
-                        Print
+                <Link href="/sign-up">
+                    <Button className="bg-indigo-600 hover:bg-indigo-700 gap-2 shadow-lg shadow-indigo-100 h-12 px-6 text-base font-bold rounded-xl hover:scale-[1.02] transition-transform">
+                        Start For Free
+                        <ArrowRight className="w-4 h-4" />
                     </Button>
-                    <Button className="bg-indigo-600 hover:bg-indigo-700 gap-2 shadow-lg shadow-indigo-100">
-                        <Download className="w-4 h-4" />
-                        Download PDF
-                    </Button>
-                </div>
+                </Link>
             </div>
 
             {/* The "PDF" Container */}
             <div className="max-w-[800px] w-full bg-white shadow-2xl rounded-sm relative overflow-hidden ring-1 ring-slate-200">
                 <img
-                    src="https://res.cloudinary.com/dwgsy6bvo/image/upload/e_sharpen:150/FairShare-Invoice-1768606275345.pdf_l1brnv.jpg"
+                    src="https://res.cloudinary.com/dwgsy6bvo/image/upload/e_sharpen:150/FairShare-Invoice-1769106028239_page-0001_ik6e1s.jpg"
                     alt="FairShare Sample Invoice"
                     className="w-full h-auto"
                 />

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, ShieldCheck, Scale, FileText, Lock, ArrowRight, HelpCircle } from "lucide-react";
+import { UpgradeButton } from "@/components/upgrade-button";
+import { StickyCta } from "@/components/sticky-cta";
+import { CheckCircle, ShieldCheck, Scale, FileText, Lock, ArrowRight, HelpCircle, Fingerprint } from "lucide-react";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -104,29 +106,39 @@ export default async function Home() {
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <SignedOut>
-                <Link href="/sign-up">
-                  <Button size="lg" className="h-14 px-8 text-lg font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02] transition-transform shadow-xl shadow-indigo-200">
-                    Create Free Invoice
+                <Link href="/sign-up" className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-lg font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02] transition-transform shadow-xl shadow-indigo-200">
+                    Start For Free
                   </Button>
                 </Link>
               </SignedOut>
               <SignedIn>
-                <Link href="/dashboard">
-                  <Button size="lg" className="h-14 px-8 text-lg font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02] transition-transform shadow-xl shadow-indigo-200">
+                <Link href="/dashboard" className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-lg font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 hover:scale-[1.02] transition-transform shadow-xl shadow-indigo-200">
                     Go to Dashboard
                   </Button>
                 </Link>
               </SignedIn>
-              <Link href="/sample-invoice">
-                <Button variant="outline" size="lg" className="h-14 px-8 text-lg font-bold rounded-xl bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">
+              <Link href="/sample-invoice" className="w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto h-14 px-8 text-lg font-bold rounded-xl bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors">
                   See Sample PDF
                 </Button>
               </Link>
             </div>
-              <div className="flex items-center gap-3 text-sm text-slate-500 font-medium">
-                <ShieldCheck className="w-5 h-5 text-emerald-500" />
-                Organized Documentation System
+            <div className="grid grid-cols-2 justify-items-center sm:flex items-center gap-x-6 gap-y-3 pt-4 border-t border-slate-100 mt-2">
+              <div className="flex items-center gap-2 text-slate-500" title="We use industry-standard encryption">
+                <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">Bank-Level Security</span>
               </div>
+              <div className="flex items-center gap-2 text-slate-500" title="Your data is encrypted at rest and in transit">
+                <ShieldCheck className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">Encrypted Data</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-500 col-span-2 sm:col-span-1" title="Secure authentication via Clerk">
+                <Fingerprint className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap">Verified by Clerk</span>
+              </div>
+            </div>
           </div>
 
           {/* Hero Visual - Problem-Only (The Text Chaos) */}
@@ -171,38 +183,49 @@ export default async function Home() {
       </section>
 
       {/* The Reality Numbers - Authority Proof */}
-      <section className="w-full bg-slate-900 py-20 text-white">
-        <div className="max-w-6xl mx-auto px-6">
+      <section className="w-full bg-indigo-900 py-20 text-white relative overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
           <div className="flex flex-col gap-4 mb-16 text-center md:text-left">
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight font-serif italic text-indigo-100">The Reality Numbers</h2>
-            <p className="text-indigo-200/70 text-lg max-w-2xl">The data behind why professional documentation isn&apos;t just helpful—it&apos;s necessary.</p>
+            <p className="text-indigo-200/70 text-lg max-w-2xl font-medium">The data behind why professional documentation isn&apos;t just helpful—it&apos;s necessary.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-12">
-            <div className="flex flex-col gap-4 p-8 bg-white/5 rounded-3xl border border-white/10">
-              <div className="text-6xl font-bold text-indigo-400 font-serif">43.5%</div>
-              <p className="text-lg text-indigo-50 font-medium">Of custodial parents do not receive the full support they are owed.</p>
-              <span className="text-xs text-indigo-300/50 uppercase tracking-widest mt-auto">Source: US Census Bureau</span>
-            </div>
-            <div className="flex flex-col gap-4 p-8 bg-white/5 rounded-3xl border border-white/10">
-              <div className="text-6xl font-bold text-indigo-400 font-serif">$30B+</div>
-              <p className="text-lg text-indigo-50 font-medium">In unpaid child support debt currently exceeds thirty billion dollars in the US.</p>
-              <span className="text-xs text-indigo-300/50 uppercase tracking-widest mt-auto">Source: Office of Child Support Services</span>
-            </div>
-            <div className="flex flex-col gap-4 p-8 bg-white/5 rounded-3xl border border-white/10">
-              <div className="text-6xl font-bold text-indigo-400 font-serif">$310k</div>
-              <p className="text-lg text-indigo-50 font-medium">The estimated cost to raise a child today, excluding college expenses.</p>
-              <span className="text-xs text-indigo-300/50 uppercase tracking-widest mt-auto">Source: Brookings Institute</span>
-            </div>
+            {[
+              {
+                value: "43.5%",
+                text: "Of custodial parents do not receive the full support they are owed.",
+                source: "Source: US Census Bureau"
+              },
+              {
+                value: "$30B+",
+                text: "In unpaid child support debt currently exceeds thirty billion dollars in the US.",
+                source: "Source: Office of Child Support Services"
+              },
+              {
+                value: "$310k",
+                text: "The estimated cost to raise a child today, excluding college expenses.",
+                source: "Source: Brookings Institute"
+              }
+            ].map((stat, i) => (
+              <div key={i} className="flex flex-col gap-4 p-10 bg-white/5 backdrop-blur-md rounded-3xl border border-white/10 hover:bg-white/10 transition-all hover:-translate-y-1 group">
+                <div className="text-6xl font-bold text-white font-serif mb-2">{stat.value}</div>
+                <p className="text-lg text-indigo-50 font-semibold leading-relaxed">{stat.text}</p>
+                <div className="h-0.5 w-12 bg-indigo-500/30 group-hover:w-20 transition-all duration-300"></div>
+                <span className="text-xs text-indigo-300/50 uppercase tracking-widest mt-auto font-bold">{stat.source}</span>
+              </div>
+            ))}
           </div>
         </div>
+        {/* Background glow to match pricing section */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.3)_0%,transparent_50%)] pointer-events-none" />
       </section>
 
       {/* Mechanism Proof Section */}
       <section id="logic" className="w-full bg-white py-24 border-b border-slate-100">
         <div className="max-w-6xl mx-auto px-6 space-y-12">
           <div className="flex flex-col gap-4 max-w-3xl">
-            <span className="text-indigo-600 font-bold text-sm uppercase tracking-widest">Mechanism Proof</span>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight font-serif">The Architecture of Accountability</h2>
+            <span className="text-indigo-600 font-bold text-sm uppercase tracking-widest">Why It Works</span>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight font-serif">The FairShare Advantage</h2>
             <p className="text-slate-600 text-lg">FairShare helps you maintain organized, professional records of shared expenses with clear documentation and attached receipts.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -335,9 +358,16 @@ export default async function Home() {
                   </li>
                 ))}
               </ul>
-              <Link href="/sign-up" className="w-full">
-                <Button className="w-full h-12 rounded-xl shadow-lg shadow-indigo-100 font-bold bg-indigo-600 hover:bg-indigo-700">Upgrade to Pro</Button>
-              </Link>
+              <div className="w-full">
+                <SignedOut>
+                  <Link href="/sign-up" className="w-full">
+                    <Button className="w-full h-12 rounded-xl shadow-lg shadow-indigo-100 font-bold bg-indigo-600 hover:bg-indigo-700">Upgrade to Pro</Button>
+                  </Link>
+                </SignedOut>
+                <SignedIn>
+                  <UpgradeButton className="w-full h-12 rounded-xl shadow-lg shadow-indigo-100 font-bold bg-indigo-600 hover:bg-indigo-700">Upgrade to Pro</UpgradeButton>
+                </SignedIn>
+              </div>
             </div>
           </div>
         </div>
@@ -414,7 +444,7 @@ export default async function Home() {
             <SignedOut>
               <Link href="/sign-up">
                 <Button size="lg" className="h-14 px-10 text-lg font-bold rounded-xl bg-white text-indigo-600 hover:bg-indigo-50 hover:scale-105 transition-transform shadow-xl">
-                  Start Your First Invoice
+                  Start For Free
                 </Button>
               </Link>
             </SignedOut>
@@ -425,17 +455,12 @@ export default async function Home() {
                 </Button>
               </Link>
             </SignedIn>
-            <Link href="#pricing">
-              <Button size="lg" className="h-14 px-10 text-lg font-bold rounded-xl bg-indigo-700 border-2 border-white/30 text-white hover:bg-indigo-500 transition-colors">
-                View Pricing
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="w-full bg-white border-t border-slate-100 py-16">
+      <footer className="w-full bg-white border-t border-slate-100 py-16 mb-20 md:mb-0">
         <div className="max-w-6xl w-full mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12">
           <div className="col-span-2 md:col-span-1 flex flex-col gap-6">
             <div className="flex items-center gap-2 text-indigo-600">
@@ -451,12 +476,13 @@ export default async function Home() {
           </div>
           <div className="flex flex-col gap-4">
             <h4 className="font-bold text-sm uppercase tracking-widest text-slate-400">Resources</h4>
-            <Link className="text-sm text-slate-600 hover:text-indigo-600" href="/refund">Refund Policy</Link>
+            <Link className="text-sm text-slate-600 hover:text-indigo-600" href="/blog">Blog</Link>
           </div>
           <div className="flex flex-col gap-4">
             <h4 className="font-bold text-sm uppercase tracking-widest text-slate-400">Company</h4>
             <Link className="text-sm text-slate-600 hover:text-indigo-600" href="/privacy">Privacy Policy</Link>
             <Link className="text-sm text-slate-600 hover:text-indigo-600" href="/terms">Terms of Service</Link>
+            <Link className="text-sm text-slate-600 hover:text-indigo-600" href="/refund">Refund Policy</Link>
             <Link className="text-sm text-slate-600 hover:text-indigo-600" href="/contact">Contact Us</Link>
           </div>
         </div>
@@ -482,6 +508,11 @@ export default async function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Mobile Sticky CTA (Signed Out Only) */}
+      <SignedOut>
+        <StickyCta />
+      </SignedOut>
     </div>
   );
 }

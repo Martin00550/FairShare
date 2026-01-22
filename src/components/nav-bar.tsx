@@ -25,9 +25,16 @@ export function NavBar() {
                 <div className="h-full flex items-center justify-between md:grid md:grid-cols-3">
                     {/* Left - Logo */}
                     <div className="flex items-center">
-                        <Link href={pathname === "/" ? "/" : "/dashboard"} className="text-2xl font-bold tracking-tight text-indigo-700 flex items-center gap-2 font-serif hover:opacity-80 transition-opacity">
-                            FairShare
-                        </Link>
+                        <SignedIn>
+                            <Link href="/dashboard" className="text-2xl font-bold tracking-tight text-indigo-700 flex items-center gap-2 font-serif hover:opacity-80 transition-opacity">
+                                FairShare
+                            </Link>
+                        </SignedIn>
+                        <SignedOut>
+                            <Link href="/" className="text-2xl font-bold tracking-tight text-indigo-700 flex items-center gap-2 font-serif hover:opacity-80 transition-opacity">
+                                FairShare
+                            </Link>
+                        </SignedOut>
                     </div>
 
                     {/* Center - Navigation */}
@@ -92,7 +99,7 @@ export function NavBar() {
                                 </SignInButton>
                                 <Link href="/sign-up">
                                     <button className="bg-indigo-600 text-white px-4 md:px-5 py-2 rounded-xl text-sm font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all hover:-translate-y-0.5 whitespace-nowrap">
-                                        Get Started
+                                        Start For Free
                                     </button>
                                 </Link>
                             </SignedOut>

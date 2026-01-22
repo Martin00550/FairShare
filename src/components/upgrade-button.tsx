@@ -8,9 +8,10 @@ import { Loader2 } from "lucide-react";
 
 interface UpgradeButtonProps {
     className?: string;
+    children?: React.ReactNode;
 }
 
-export function UpgradeButton({ className }: UpgradeButtonProps) {
+export function UpgradeButton({ className, children }: UpgradeButtonProps) {
     const { isLoaded, openCheckout } = usePaddle();
     const { user } = useUser();
     const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +57,7 @@ export function UpgradeButton({ className }: UpgradeButtonProps) {
                     Loading...
                 </>
             ) : (
-                "Upgrade to Pro - $9/mo"
+                children || "Upgrade to Pro - $9/mo"
             )}
         </Button>
     );

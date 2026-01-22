@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { auth } from "@clerk/nextjs/server";
 import { createClient } from "@supabase/supabase-js";
-import { Plus, FileText, Clock, CheckCircle } from "lucide-react";
+import { Plus, FileText } from "lucide-react";
 import { InvoiceStatusActions } from "@/components/invoice-status-actions";
 
 const supabaseAdmin = createClient(
@@ -82,50 +82,84 @@ export default async function InvoicesPage() {
                         </Link>
                     </div>
                 ) : (
-                    /* Invoice List */
-                    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-                        <table className="w-full text-left">
-                            <thead>
-                                <tr className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500 font-semibold border-b border-slate-200">
-                                    <th className="px-6 py-4">Invoice #</th>
-                                    <th className="px-6 py-4">Date</th>
-                                    <th className="px-6 py-4 text-right">Total</th>
-                                    <th className="px-6 py-4 text-right">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-100">
-                                {invoices.map((invoice) => (
-                                    <tr key={invoice.id} className="hover:bg-slate-50 transition-colors">
-                                        <td className="px-6 py-4">
-                                            <span className="font-semibold text-slate-900">{invoice.invoiceNumber}</span>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-slate-500">{invoice.date}</td>
-                                        <td className="px-6 py-4 text-right">
-                                            <span className="font-bold text-indigo-600">${Number(invoice.total).toFixed(2)}</span>
-                                        </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <div className="flex items-center justify-end gap-3">
-                                                <InvoiceStatusActions
-                                                    invoiceId={invoice.id}
-                                                    status={invoice.status}
-                                                />
-                                                {invoice.pdfUrl && (
-                                                    <a
-                                                        href={invoice.pdfUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-indigo-600 hover:text-indigo-800"
-                                                    >
-                                                        <FileText className="w-5 h-5" />
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </td>
+                    <>
+                        {/* Mobile Card Layout */}
+                        <div className="md:hidden space-y-4">
+                            {invoices.map((invoice) => (
+                                <div key={invoice.id} className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+                                    <div className="flex items-start justify-between mb-3">
+                                        <div>
+                                            <span className="font-semibold text-slate-900 block">{invoice.invoiceNumber}</span>
+                                            <span className="text-sm text-slate-500">{invoice.date}</span>
+                                        </div>
+                                        <span className="font-bold text-indigo-600 text-lg">${Number(invoice.total).toFixed(2)}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                                        <InvoiceStatusActions
+                                            invoiceId={invoice.id}
+                                            status={invoice.status}
+                                        />
+                                        {invoice.pdfUrl && (
+                                            <a
+                                                href={invoice.pdfUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-1.5 text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                                            >
+                                                <FileText className="w-4 h-4" />
+                                                View PDF
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Desktop Table Layout */}
+                        <div className="hidden md:block bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                            <table className="w-full text-left">
+                                <thead>
+                                    <tr className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500 font-semibold border-b border-slate-200">
+                                        <th className="px-6 py-4">Invoice #</th>
+                                        <th className="px-6 py-4">Date</th>
+                                        <th className="px-6 py-4 text-right">Total</th>
+                                        <th className="px-6 py-4 text-right">Status</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {invoices.map((invoice) => (
+                                        <tr key={invoice.id} className="hover:bg-slate-50 transition-colors">
+                                            <td className="px-6 py-4">
+                                                <span className="font-semibold text-slate-900">{invoice.invoiceNumber}</span>
+                                            </td>
+                                            <td className="px-6 py-4 text-sm text-slate-500">{invoice.date}</td>
+                                            <td className="px-6 py-4 text-right">
+                                                <span className="font-bold text-indigo-600">${Number(invoice.total).toFixed(2)}</span>
+                                            </td>
+                                            <td className="px-6 py-4 text-right">
+                                                <div className="flex items-center justify-end gap-3">
+                                                    <InvoiceStatusActions
+                                                        invoiceId={invoice.id}
+                                                        status={invoice.status}
+                                                    />
+                                                    {invoice.pdfUrl && (
+                                                        <a
+                                                            href={invoice.pdfUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-indigo-600 hover:text-indigo-800"
+                                                        >
+                                                            <FileText className="w-5 h-5" />
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </>
                 )}
             </div>
         </div>
