@@ -13,14 +13,17 @@ const mockData = new Proxy([], {
 });
 
 const makeRecursiveProxy = (): any => {
-    const targetFn = (...args: any[]) => makeRecursiveProxy();
-
-    (targetFn as any).then = (resolve: any) => resolve({
-        data: mockData,
-        error: null,
-        count: 0,
-        publicUrl: "https://mock-url.pdf"
-    });
+    const targetFn = Object.assign(
+        (...args: any[]) => makeRecursiveProxy(),
+        {
+            then: (resolve: any) => resolve({
+                data: mockData,
+                error: null,
+                count: 0,
+                publicUrl: "https://mock-url.pdf"
+            })
+        }
+    );
 
     return new Proxy(targetFn, {
         get(t, p) {
