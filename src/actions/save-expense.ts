@@ -1,14 +1,8 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "@/lib/supabase";
 import { auth, currentUser } from "@clerk/nextjs/server";
 
-// We use a SERVICE ROLE client here to bypass RLS for the insert, 
-// ensuring we explicitly set the user_id from the trusted Clerk auth() context.
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 // SECURITY: Define typed interface for expense input
 interface ExpenseInput {

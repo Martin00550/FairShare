@@ -1,11 +1,7 @@
 import { headers } from "next/headers";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "@/lib/supabase";
 import crypto from "crypto";
 
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 function verifyPaddleSignature(payload: string, signature: string, secret: string) {
     const [tsPart, hPart] = signature.split(";");

@@ -2,13 +2,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { auth } from "@clerk/nextjs/server";
 import { syncUserProfile } from "@/actions/sync-profile";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "@/lib/supabase";
 import { FileText, Receipt, TrendingUp, Zap, Plus, Camera, ChevronRight } from "lucide-react";
 
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+
 
 async function getDashboardData(userId: string) {
     const { data: profile } = await supabaseAdmin
