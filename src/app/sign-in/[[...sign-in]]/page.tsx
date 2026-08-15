@@ -13,8 +13,8 @@ export default function SignInPage() {
                 <SignIn
                     appearance={{
                         elements: {
-                            rootBox: "w-full",
-                            card: "shadow-xl border border-slate-100 rounded-2xl",
+                            rootBox: "w-full flex justify-center",
+                            card: "shadow-xl border border-slate-100 rounded-2xl w-full max-w-md",
                             headerTitle: "hidden",
                             headerSubtitle: "hidden",
                             socialButtonsBlockButton: "border border-slate-200 hover:bg-slate-50",
