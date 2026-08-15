@@ -13,31 +13,19 @@ export function NavBar() {
         { href: "/dashboard", label: "Home", icon: Home },
         { href: "/expenses", label: "Expenses", icon: Receipt },
         { href: "/invoices", label: "Invoices", icon: FileText },
-        // Profile is handled by UserButton usually, but we can have a profile page too.
-        // Prompt says "Profile" tab.
         { href: "/profile", label: "Profile", icon: User },
     ];
 
     return (
         <>
-            {/* Top Header (Visible on all screens) */}
             <header className="h-16 border-b border-slate-200/50 bg-white/80 backdrop-blur-md px-4 md:px-6 sticky top-0 z-50">
                 <div className="h-full flex items-center justify-between md:grid md:grid-cols-3">
-                    {/* Left - Logo */}
                     <div className="flex items-center">
-                        <SignedIn>
-                            <Link href="/dashboard" className="text-2xl font-bold tracking-tight text-indigo-700 flex items-center gap-2 font-serif hover:opacity-80 transition-opacity">
-                                FairShare
-                            </Link>
-                        </SignedIn>
-                        <SignedOut>
-                            <Link href="/" className="text-2xl font-bold tracking-tight text-indigo-700 flex items-center gap-2 font-serif hover:opacity-80 transition-opacity">
-                                FairShare
-                            </Link>
-                        </SignedOut>
+                        <Link href="/" className="text-2xl font-bold tracking-tight text-indigo-700 flex items-center gap-2 font-serif hover:opacity-80 transition-opacity">
+                            FairShare
+                        </Link>
                     </div>
 
-                    {/* Center - Navigation */}
                     <nav className="hidden md:flex items-center justify-center gap-6">
                         {pathname === "/" ? (
                             <>
@@ -82,7 +70,6 @@ export function NavBar() {
                         )}
                     </nav>
 
-                    {/* Right - Actions */}
                     <div className="flex items-center gap-4 justify-end">
                         <ClerkLoading>
                             <div className="h-9 w-24 bg-slate-100 rounded-xl animate-pulse" />
@@ -108,7 +95,6 @@ export function NavBar() {
                 </div>
             </header>
 
-            {/* Mobile Bottom Nav */}
             <div className="md:hidden fixed bottom-0 left-0 right-0 border-t border-slate-200 bg-white/95 backdrop-blur-md pb-safe z-50">
                 <SignedIn>
                     <nav className="grid grid-cols-4 h-18 py-2">
