@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   authors: [{ name: "FairShare" }],
   creator: "FairShare",
   publisher: "FairShare",
+  other: {
+    "strix-verification": "strix-verify-329dd260f8cbd0ae11bca343087d0edf",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
